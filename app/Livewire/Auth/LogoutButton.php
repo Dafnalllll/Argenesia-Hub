@@ -5,15 +5,23 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Aktivitas;
+use App\Models\AktivitasAdmin;
 
 class LogoutButton extends Component
 {
     public function logout()
     {
         Aktivitas::create([
-            'tanggal' => now()->toDateString(),
+            'user_id' => Auth::id(),
+            'tanggal' => now(),
             'aktivitas' => 'Logout',
-            'keterangan' => 'User logout pada ' . now()->format('H:i:s'),
+            'keterangan' => 'User logout',
+        ]);
+
+        AktivitasAdmin::create([
+            'tanggal' => now(),
+            'aktivitas' => 'Logout',
+            'keterangan' => 'Admin logout',
         ]);
 
         Auth::logout();

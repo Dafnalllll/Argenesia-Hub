@@ -13,7 +13,8 @@ class CreateAktivitasTable extends Migration
     {
         Schema::create('aktivitas', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->dateTime('tanggal');
             $table->string('aktivitas');
             $table->text('keterangan')->nullable();
             $table->timestamps();

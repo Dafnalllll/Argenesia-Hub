@@ -40,10 +40,25 @@
             Maaf, halaman yang kamu cari tidak tersedia atau sudah dipindahkan.
         </p>
         <div data-aos="flip-left" data-aos-delay="900">
-            <a href="{{ auth()->check() ? url('/dashboard') : url('/') }}"
-                class="inline-block px-5 py-2 sm:px-6 bg-linear-to-r from-[#F53003] to-[#0074D9] text-white rounded-full font-medium hover:from-[#d42a02] hover:to-[#005fa3] transition-all hover:scale-105 text-base sm:text-lg">
-                Kembali ke Beranda
-            </a>
+            @if(auth()->check())
+                @php
+                    $user = auth()->user();
+                    if (isset($user->role) && $user->role->name === 'Admin') {
+                        $dashboardUrl = url('/dashboard/admin');
+                    } else {
+                        $dashboardUrl = url('/dashboard');
+                    }
+                @endphp
+                <a href="{{ $dashboardUrl }}"
+                    class="inline-block px-5 py-2 sm:px-6 bg-linear-to-r from-[#F53003] to-[#0074D9] text-white rounded-full font-medium hover:from-[#d42a02] hover:to-[#005fa3] transition-all hover:scale-105 text-base sm:text-lg">
+                    Kembali ke Beranda
+                </a>
+            @else
+                <a href="{{ url('/') }}"
+                    class="inline-block px-5 py-2 sm:px-6 bg-linear-to-r from-[#F53003] to-[#0074D9] text-white rounded-full font-medium hover:from-[#d42a02] hover:to-[#005fa3] transition-all hover:scale-105 text-base sm:text-lg">
+                    Kembali ke Beranda
+                </a>
+            @endif
         </div>
     </div>
 

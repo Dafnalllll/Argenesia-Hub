@@ -15,7 +15,7 @@ class CreateAktivitasAdminTable extends Migration
     {
         Schema::create('aktivitas_admin', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->date('tanggal'); // Kolom tanggal
+            $table->dateTime('tanggal'); // Kolom tanggal
             $table->string('aktivitas'); // Kolom aktivitas
             $table->text('keterangan')->nullable(); // Kolom keterangan (nullable)
             $table->timestamps(); // Kolom created_at dan updated_at

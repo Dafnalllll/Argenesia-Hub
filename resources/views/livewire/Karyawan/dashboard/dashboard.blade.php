@@ -40,7 +40,9 @@
         <!-- Card 3 -->
         <div class="bg-white/30 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl p-10 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-2xl w-full">
             <img src="{{ asset('img/cuti/pengajuan.webp') }}" alt="Total Pengajuan" class="w-14 h-14 mb-4 drop-shadow" />
-            <span class="text-5xl font-extrabold text-[#16a34a] drop-shadow">3</span>
+            <span class="text-5xl font-extrabold text-[#16a34a] drop-shadow">
+        {{ $totalPengajuan }}
+    </span>
             <span class="mt-2 text-gray-800 font-semibold tracking-wide text-xl">Total Pengajuan Cuti</span>
             <span class="mt-2 text-gray-600 text-sm text-center">Jumlah total pengajuan cuti yang sudah kamu lakukan.</span>
             <a href="/cuti/riwayat" class="mt-4 px-4 py-2 rounded-lg bg-[#16a34a] text-white font-semibold shadow hover:bg-[#0e7c2f] transition-all hover:scale-105">Lihat Detail Pengajuan</a>
@@ -56,36 +58,33 @@
                 <thead class="bg-gray-100">
                     <tr class="text-left text-gray-700">
                         <th class="py-2 px-3 border-b border-gray-300">Tanggal</th>
-                        <th class="py-2 px-3 border-b border-gray-300">Jenis</th>
+                        <th class="py-2 px-3 border-b border-gray-300">Tipe</th>
                         <th class="py-2 px-3 border-b border-gray-300">Status</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    <tr>
-                        <td class="py-2 px-3">2026-01-22</td>
-                        <td class="py-2 px-3">Tahunan</td>
-                        <td class="py-2 px-3 text-green-600 font-semibold">Disetujui</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-3">2026-01-20</td>
-                        <td class="py-2 px-3">Sakit</td>
-                        <td class="py-2 px-3 text-yellow-600 font-semibold">Menunggu</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-3">2026-01-18</td>
-                        <td class="py-2 px-3">Tahunan</td>
-                        <td class="py-2 px-3 text-red-600 font-semibold">Ditolak</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-3">2026-01-15</td>
-                        <td class="py-2 px-3">Izin</td>
-                        <td class="py-2 px-3 text-green-600 font-semibold">Disetujui</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-3">2026-01-10</td>
-                        <td class="py-2 px-3">Tahunan</td>
-                        <td class="py-2 px-3 text-green-600 font-semibold">Disetujui</td>
-                    </tr>
+                    @forelse($pengajuanTerbaru as $item)
+        <tr>
+            <td class="py-2 px-3">{{ $item->tanggal_mulai }}</td>
+            <td class="py-2 px-3">{{ $item->tipeCuti->nama_cuti ?? '-' }}</td>
+            <td class="py-2 px-3">
+                <span class="px-3 py-1 rounded-full font-semibold border
+                    @if($item->status == 'Diterima')
+                        border-green-500 text-green-700 bg-green-50
+                    @elseif($item->status == 'Ditolak')
+                        border-red-500 text-red-700 bg-red-50
+                    @else
+                        border-yellow-500 text-yellow-700 bg-yellow-50
+                    @endif">
+                    {{ $item->status }}
+                </span>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="3" class="py-2 px-3 text-center text-gray-500">Belum ada pengajuan cuti.</td>
+        </tr>
+    @endforelse
                 </tbody>
             </table>
         </div>

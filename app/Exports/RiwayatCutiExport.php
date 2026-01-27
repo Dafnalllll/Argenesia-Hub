@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Cuti;
+use App\Models\PengajuanCuti; 
 use Maatwebsite\Excel\Concerns\FromCollection;
 
 class RiwayatExport implements FromCollection
@@ -20,7 +20,7 @@ class RiwayatExport implements FromCollection
     */
     public function collection()
     {
-        $query = Cuti::query();
+        $query = PengajuanCuti::query(); // Ganti dari Cuti::query()
         if ($this->status) $query->where('status', $this->status);
         if ($this->kategori) $query->where('kategori', $this->kategori);
         return $query->latest()->get();

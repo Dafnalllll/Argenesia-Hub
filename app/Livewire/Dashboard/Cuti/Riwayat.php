@@ -3,33 +3,40 @@
 namespace App\Livewire\Dashboard\Cuti;
 
 use Livewire\Component;
-use App\Models\Cuti;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\RiwayatCutiExport;
+use App\Models\PengajuanCuti;
+use App\Models\TipeCuti;
+
+
 
 class Riwayat extends Component
 {
     public $filterStatus = '';
     public $filterKategori = '';
 
+    public function resetFilter()
+    {
+        $this->filterStatus = '';
+        $this->filterKategori = '';
+    }
+
     public function render()
     {
-        $query = Cuti::query();
+        $tipe_cutis = TipeCuti::pluck('nama_cuti')->toArray();
+
+        $query = PengajuanCuti::query(); // Ganti dari Cuti::query()
 
         if ($this->filterStatus) {
             $query->where('status', $this->filterStatus);
         }
         if ($this->filterKategori) {
-            $query->where('kategori', $this->filterKategori);
+            $query->whereHas('tipeCuti', function($q) {
+                $q->where('nama_cuti', $this->filterKategori);
+            });
         }
 
         return view('livewire.karyawan.dashboard.cuti.riwayat', [
-            'riwayatCuti' => $query->latest()->get(),
+            'riwayatCuti' => $query->latest()->with('tipeCuti')->get(),
+            'tipe_cutis' => $tipe_cutis,
         ]);
-    }
-
-    public function exportExcel()
-    {
-        return Excel::download(new RiwayatCutiExport($this->filterStatus, $this->filterKategori), 'riwayat-cuti.xlsx');
     }
 }

@@ -2,18 +2,18 @@
 <div class="flex-1 flex items-start justify-center pt-8 pb-8  min-h-screen">
     <div class="relative w-full max-w-6xl mx-8 bg-white/60 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl p-10 flex flex-col gap-8 overflow-hidden">
         <!-- Decorative Gradient Blobs -->
-        <div class="absolute -top-20 -left-20 w-60 h-60 bg-gradient-to-br from-[#0074D9]/30 to-[#F53003]/20 rounded-full blur-2xl opacity-60 z-0"></div>
-        <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-gradient-to-tr from-[#F53003]/30 to-[#0074D9]/20 rounded-full blur-2xl opacity-60 z-0"></div>
+        <div class="absolute -top-20 -left-20 w-60 h-60 bg-linear-to-br from-[#0074D9]/30 to-[#F53003]/20 rounded-full blur-2xl opacity-60 z-0"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-linear-to-tr from-[#F53003]/30 to-[#0074D9]/20 rounded-full blur-2xl opacity-60 z-0"></div>
         <div class="relative z-10 flex flex-col items-center">
             <!-- Avatar -->
             <div class="relative mb-4">
-                <div class="w-28 h-28 rounded-full bg-gradient-to-tr from-[#0074D9] to-[#F53003] p-1 shadow-xl animate-pulse-slow">
+                <div class="w-28 h-28 rounded-full bg-linear-to-tr from-[#0074D9] to-[#F53003] p-1 shadow-xl animate-pulse-slow">
                     <img src="{{ $foto ? asset($foto) : asset('img/sidebar/profil.webp') }}" alt="Foto Profil"
                         class="w-full h-full rounded-full object-cover border-4 border-white shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer" />
                 </div>
                 @if($editMode)
                     <label for="foto_baru"
-                        class="absolute bottom-0 right-0 bg-gradient-to-tr from-[#0074D9] to-[#F53003] text-white rounded-full p-2 shadow-lg cursor-pointer hover:scale-110 transition-all duration-200">
+                        class="absolute bottom-0 right-0 bg-linear-to-tr from-[#0074D9] to-[#F53003] text-white rounded-full p-2 shadow-lg cursor-pointer hover:scale-110 transition-all duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -21,10 +21,15 @@
                     <input id="foto_baru" type="file" wire:model="foto_baru" class="hidden">
                 @endif
             </div>
-            <h2 class="text-2xl font-extrabold bg-gradient-to-r from-[#0074D9] to-[#F53003] bg-clip-text text-transparent drop-shadow tracking-wide uppercase mb-1">{{ $username ?? 'Username' }}</h2>
+            <h2 class="text-2xl font-extrabold bg-linear-to-r from-[#0074D9] to-[#F53003] bg-clip-text text-transparent drop-shadow tracking-wide uppercase mb-1">{{ $username ?? 'Username' }}</h2>
             <span class="text-[#F53003] text-sm mb-2 flex items-center gap-2 bg-white/70 px-3 py-1 rounded-lg shadow">
                 <img src="{{ asset('img/profil/id.webp') }}" alt="ID" class="w-5 h-5" />
-                {{ $kode_karyawan ?? 'Kode Karyawan' }}
+                ARG -
+                @if($status_karyawan === 'Aktif' && $kode_karyawan)
+                    {{ $kode_karyawan }}
+                @else
+                    <span class="text-gray-400"></span>
+                @endif
             </span>
             @if ($foto_baru)
                 <img src="{{ $foto_baru->temporaryUrl() }}" class="w-16 h-16 rounded-full mt-2 object-cover border-2 border-[#0074D9] shadow-lg">
@@ -77,12 +82,12 @@
         <div class="mt-8 flex justify-end space-x-2 relative z-10">
             @if(!$editMode)
                 <button wire:click="enableEdit"
-                    class="px-6 py-2 bg-gradient-to-r from-[#0074D9] to-[#F53003] text-white rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-bold cursor-pointer">
+                    class="px-6 py-2 bg-linear-to-r from-[#0074D9] to-[#F53003] text-white rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-bold cursor-pointer">
                     Edit
                 </button>
             @else
                 <button wire:click="updateProfil"
-                    class="px-6 py-2 bg-gradient-to-r from-[#F53003] to-[#0074D9] text-white rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-bold cursor-pointer">
+                    class="px-6 py-2 bg-linear-to-r from-[#F53003] to-[#0074D9] text-white rounded-lg shadow-lg hover:scale-105 hover:shadow-2xl transition-all font-bold cursor-pointer">
                     Update
                 </button>
                 <button wire:click="cancelEdit"

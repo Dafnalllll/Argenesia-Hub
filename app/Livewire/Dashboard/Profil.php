@@ -29,19 +29,19 @@ class Profil extends Component
         $user = Auth::user();
         $karyawan = $user->karyawan;
 
-        // Jika belum ada data karyawan, buat otomatis dengan default
+        // Jika belum ada data karyawan, buat otomatis dengan status Nonaktif, TANPA kode_karyawan
         if (!$karyawan) {
             $karyawan = Karyawan::create([
                 'user_id' => $user->id,
-                'kode_karyawan' => 'ARG-',
                 'status_karyawan' => 'Nonaktif',
+                // 'kode_karyawan' => null, // Jangan diisi dulu
             ]);
         }
 
         $this->alamat = $karyawan->alamat ?? '';
         $this->nomor_telepon = $karyawan->nomor_telepon ?? '';
         $this->foto = $karyawan->foto ?? null;
-        $this->kode_karyawan = $karyawan->kode_karyawan ?? 'ARG-';
+        $this->kode_karyawan = $karyawan->status_karyawan === 'Aktif' ? ($karyawan->kode_karyawan ?? '-') : '-';
         $this->status_karyawan = $karyawan->status_karyawan ?? 'Nonaktif';
         $this->tanggal_masuk = $karyawan->tanggal_masuk ?? null;
         $this->email = $user->email;
@@ -79,11 +79,11 @@ class Profil extends Component
 
         $karyawan->save();
 
-        // Tambahkan ini:
         Aktivitas::create([
-            'tanggal' => now()->toDateString(),
+            'user_id' => Auth::id(),
+            'tanggal' => now(),
             'aktivitas' => 'Update Profil',
-            'keterangan' => 'User mengubah profil pada ' . now()->format('H:i:s'),
+            'keterangan' => 'User mengubah profil',
         ]);
 
         $this->editMode = false;

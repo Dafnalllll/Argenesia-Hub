@@ -38,11 +38,11 @@
     <script>
         AOS.init();
     </script>
-    @livewireScripts
     <script>
         window.addEventListener('redirectToLogin', function () {
             window.location.href = '/login';
         });
     </script>
+    @livewireScripts
 </body>
 </html>

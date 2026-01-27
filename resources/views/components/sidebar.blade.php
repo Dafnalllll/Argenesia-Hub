@@ -54,46 +54,37 @@
                     </a>
                 </li>
                 <li>
-                    @php
-                        $cutiAdminActive = request()->is('cuti-admin') || request()->is('cuti-admin/*');
-                    @endphp
                     <div class="flex items-center px-3 py-2 rounded-lg transition relative
-                        {{ $cutiAdminActive ? 'bg-white text-[#0074D9] shadow-md' : 'text-white hover:bg-white hover:text-[#0074D9]' }}">
+                        {{ request()->is('admin/manajemen-cuti') ? 'bg-white text-[#0074D9] shadow-md' : 'text-white hover:bg-white hover:text-[#0074D9]' }}">
                         <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Kategori" class="w-5 h-5" />
-                        <a href="/cuti-admin" class="flex items-center flex-1 focus:outline-none">
-                            <span class="ml-4">Cuti</span>
+                        <a href="/admin/manajemen-cuti" class="flex items-center flex-1 focus:outline-none">
+                            <span class="ml-4">Manajemen Cuti</span>
                         </a>
                         <button type="button"
                             onclick="document.getElementById('cuti-admin-dropdown').classList.toggle('hidden'); document.getElementById('cuti-admin-arrow').classList.toggle('rotate-180');"
                             class="ml-2 focus:outline-none cursor-pointer rounded-lg transition
-                            {{ $cutiAdminActive ? 'bg-white' : '' }} hover:bg-white group flex items-center justify-center p-1">
-                            <svg id="cuti-admin-arrow" class="w-4 h-4 transition-transform {{ request()->is('cuti-admin*') && !request()->is('cuti-admin') ? 'rotate-180' : '' }}" fill="none" stroke="#0074D9" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+                            {{ request()->is('admin/manajemen-cuti*') && !request()->is('admin/manajemen-cuti') ? 'bg-white' : '' }} hover:bg-white group flex items-center justify-center p-1">
+                            <svg id="cuti-admin-arrow" class="w-4 h-4 transition-transform {{ request()->is('admin/manajemen-cuti*') && !request()->is('admin/manajemen-cuti') ? 'rotate-180' : '' }}" fill="none" stroke="#0074D9" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
                         </button>
-                        @if($cutiAdminActive)
+                        @if(request()->is('admin/manajemen-cuti') || request()->is('admin/manajemen-cuti/*'))
                             <span class="absolute left-0 top-0 h-full w-1 bg-[#0074D9] rounded-r-lg shadow-lg transition-all"></span>
                         @endif
                     </div>
-                    <ul id="cuti-admin-dropdown" class="ml-8 mt-1 space-y-1 {{ request()->is('cuti-admin*') && !request()->is('cuti-admin') ? '' : 'hidden' }}">
+                    <ul id="cuti-admin-dropdown" class="ml-8 mt-1 space-y-1 {{ request()->is('admin/manajemen-cuti*') && !request()->is('admin/manajemen-cuti') ? '' : 'hidden' }}">
                         <li>
-                            <a href="/cuti-admin/tipe"
+                            <a href="/admin/manajemen-cuti/atur-tipe-cuti"
                                 class="block px-3 py-2 rounded-lg transition
-                                {{ request()->is('cuti-admin/tipe') ? 'bg-white text-[#F53003]' : 'text-white hover:bg-white hover:text-[#F53003]' }}">
+                                {{ request()->is('admin/manajemen-cuti/atur-tipe-cuti') ? 'bg-white text-[#F53003]' : 'text-white hover:bg-white hover:text-[#F53003]' }}">
                                 <img src="{{ asset('img/cuti/kategori.webp') }}" alt="Kategori" class="w-5 h-5 inline mr-2" />
                                 Atur Tipe Cuti
-                                @if(request()->is('cuti-admin/tipe'))
-                                    <span class="absolute left-0 top-0 h-full w-1 bg-[#F53003] rounded-r-lg shadow-lg transition-all"></span>
-                                @endif
                             </a>
                         </li>
                         <li>
-                            <a href="/cuti-admin/rekap"
+                            <a href="/admin/manajemen-cuti/rekap-cuti"
                                 class="block px-3 py-2 rounded-lg transition
-                                {{ request()->is('cuti-admin/rekap') ? 'bg-white text-[#F53003]' : 'text-white hover:bg-white hover:text-[#F53003]' }}">
+                                {{ request()->is('admin/manajemen-cuti/rekap-cuti') ? 'bg-white text-[#F53003]' : 'text-white hover:bg-white hover:text-[#F53003]' }}">
                                 <img src="{{ asset('img/sidebar/rekap.webp') }}" alt="Rekap" class="w-5 h-5 inline mr-2" />
                                 Rekap Cuti
-                                @if(request()->is('cuti-admin/rekap'))
-                                    <span class="absolute left-0 top-0 h-full w-1 bg-[#F53003] rounded-r-lg shadow-lg transition-all"></span>
-                                @endif
                             </a>
                         </li>
                     </ul>
@@ -107,6 +98,9 @@
                         {{ request()->is('dashboard') ? 'bg-white text-[#F53003] shadow-md' : 'text-white hover:bg-white hover:text-[#F53003]' }}">
                         <img src="{{ asset('img/sidebar/dashboard.webp') }}" alt="Dashboard" class="w-5 h-5" />
                         <span class="ml-4">Dashboard</span>
+                        @if(request()->is('dashboard'))
+                            <span class="absolute left-0 top-0 h-full w-1 bg-[#F53003] rounded-r-lg shadow-lg transition-all"></span>
+                        @endif
                     </a>
                 </li>
                 <li>
@@ -114,6 +108,9 @@
                         {{ request()->is('profil') ? 'bg-white text-[#0074D9] shadow-md' : 'text-white hover:bg-white hover:text-[#0074D9]' }}">
                         <img src="{{ asset('img/sidebar/profil.webp') }}" alt="Profil" class="w-5 h-5" />
                         <span class="ml-4">Profil</span>
+                        @if(request()->is('profil'))
+                            <span class="absolute left-0 top-0 h-full w-1 bg-[#0074D9] rounded-r-lg shadow-lg transition-all"></span>
+                        @endif
                     </a>
                 </li>
                 <li>
@@ -132,6 +129,9 @@
                             {{ $cutiActive ? 'bg-white' : '' }} hover:bg-white group flex items-center justify-center p-1">
                             <svg id="cuti-arrow" class="w-4 h-4 transition-transform {{ request()->is('cuti*') && !request()->is('cuti') ? 'rotate-180' : '' }}" fill="none" stroke="#F53003" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
                         </button>
+                        @if($cutiActive)
+                            <span class="absolute left-0 top-0 h-full w-1 bg-[#F53003] rounded-r-lg shadow-lg transition-all"></span>
+                        @endif
                     </div>
                     <ul id="cuti-dropdown" class="ml-8 mt-1 space-y-1 {{ request()->is('cuti*') && !request()->is('cuti') ? '' : 'hidden' }}">
                         <li>

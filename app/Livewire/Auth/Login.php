@@ -3,8 +3,9 @@
 namespace App\Livewire\Auth;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Aktivitas;
+use App\Models\AktivitasAdmin;
+use Illuminate\Support\Facades\Auth;
 
 class Login extends Component
 {
@@ -30,14 +31,21 @@ class Login extends Component
 
             // Tambahkan ini:
             Aktivitas::create([
-                'tanggal' => now()->toDateString(),
+                'user_id' => $user->id,
+                'tanggal' => now(),
                 'aktivitas' => 'Login',
-                'keterangan' => 'User login pada ' . now()->format('H:i:s'),
+                'keterangan' => 'User login',
             ]);
 
             // Redirect sesuai role
             $role = strtolower($user->role->name);
             if ($role === 'admin') {
+                // Catat aktivitas admin
+                AktivitasAdmin::create([
+                    'tanggal' => now(),
+                    'aktivitas' => 'Login',
+                    'keterangan' => 'Admin login',
+                ]);
                 return redirect()->route('dashboard.admin');
             } elseif ($role === 'hr') {
                 return redirect()->route('dashboard.hr'); // Pastikan route ini ada
@@ -49,20 +57,6 @@ class Login extends Component
         }
     }
 
-    public function logout()
-    {
-        Aktivitas::create([
-            'tanggal' => now()->toDateString(),
-            'aktivitas' => 'Logout',
-            'keterangan' => 'User logout pada ' . now()->format('H:i:s'),
-        ]);
-
-        Auth::logout();
-        session()->invalidate();
-        session()->regenerateToken();
-
-        $this->dispatchBrowserEvent('redirectToLogin');
-    }
 
     public function render()
     {

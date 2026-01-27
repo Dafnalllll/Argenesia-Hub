@@ -1,16 +1,21 @@
 <?php
 
 use App\Livewire\Auth\Login;
-use App\Livewire\Auth\Register;
-use App\Livewire\Dashboard\Dashboard;
-use App\Livewire\Dashboard\Profil;
-use App\Livewire\Dashboard\Cuti;
 use App\Http\Middleware\role;
+use App\Livewire\Auth\Register;
+use App\Livewire\Dashboard\Cuti;
+use App\Livewire\Admin\RekapCuti;
+use App\Livewire\Dashboard\Profil;
+use App\Livewire\Admin\AturTipeCuti;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
-use App\Livewire\Admin\Dashboard as AdminDashboard;
-use App\Livewire\Admin\ManajemenKaryawan;
+use App\Livewire\Admin\ManajemenCuti;
 use App\Livewire\Admin\ManajemenUser;
+use App\Livewire\Dashboard\Dashboard;
+use Illuminate\Support\Facades\Route;
+use App\Livewire\Dashboard\Cuti\Riwayat;
+use App\Livewire\Admin\ManajemenKaryawan;
+use App\Livewire\Dashboard\Cuti\Pengajuan;
+use App\Livewire\Admin\Dashboard as AdminDashboard;
 
 
 Route::get('/', function () {
@@ -30,14 +35,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/profil', Profil::class)->name('profil');
     Route::get('/cuti', Cuti::class)->name('cuti');
-    Route::view('/cuti/pengajuan', 'livewire.karyawan.dashboard.cuti.pengajuan')->name('cuti.pengajuan');
-    Route::view('/cuti/riwayat', 'livewire.karyawan.dashboard.cuti.riwayat')->name('cuti.riwayat');
+    Route::get('/cuti/pengajuan', Pengajuan::class)->name('cuti.pengajuan');
+    Route::get('/cuti/riwayat', Riwayat::class)->name('cuti.riwayat');
+    Route::get('/cuti/download-template', function () {
+        return response()->download(public_path('files/template_surat_cuti_argenesia.docx'));
+    })->name('cuti.download-template');
 
     // Route khusus admin
     Route::middleware([role::class . ':Admin'])->group(function () {
         Route::get('/dashboard/admin', AdminDashboard::class)->name('dashboard.admin');
         Route::get('/admin/manajemen-user', ManajemenUser::class)->name('manajemen-user');
         Route::get('/admin/manajemen-karyawan', ManajemenKaryawan::class)->name('manajemen-karyawan');
+        Route::get('/admin/manajemen-cuti',ManajemenCuti::class)->name('manajemen-cuti');
+        Route::get('/admin/manajemen-cuti/atur-tipe-cuti',AturTipeCuti::class)->name('atur-tipe-cuti');
+        Route::get('/admin/manajemen-cuti/rekap-cuti',RekapCuti::class)->name('rekap-cuti');
+
     });
 });
 

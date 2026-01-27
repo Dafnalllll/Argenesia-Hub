@@ -18,12 +18,15 @@
                         @elseif(strtolower($item->aktivitas) == 'logout')
                             <span class="px-2 py-1 rounded bg-red-100 text-red-700 font-semibold">Logout</span>
                         @elseif(strtolower($item->aktivitas) == 'update profil')
-                            <span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 font-semibold">Update Profil</span>
+                            <span class="px-2 py-1 rounded bg-yellow-100 text-yellow-700 font-semibold whitespace-nowrap">Update Profil</span>
                         @else
-                            <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-semibold">{{ $item->aktivitas }}</span>
+                            <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-semibold whitespace-nowrap">{{ $item->aktivitas }}</span>
                         @endif
                     </td>
-                    <td class="py-2 px-3">{{ $item->keterangan }}</td>
+                    <td class="py-2 px-3">
+                        {{ $item->keterangan }}
+                        <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($item->tanggal)->diffForHumans() }})</span>
+                    </td>
                 </tr>
             @empty
                 <tr>

@@ -11,10 +11,21 @@
             </thead>
             <tbody>
                 @forelse ($aktivitasAdmin as $aktivitas)
-                    <tr class="hover:bg-pink-100 transition animate-fade-in-up">
-                        <td class="py-2 px-4">{{ $aktivitas->tanggal }}</td>
-                        <td class="py-2 px-4">{{ $aktivitas->aktivitas }}</td>
-                        <td class="py-2 px-4">{{ $aktivitas->keterangan }}</td>
+                    <tr class="hover:bg-pink-100 transition text-center animate-fade-in-up">
+                        <td class="py-2 px-3">{{ $aktivitas->tanggal }}</td>
+                        <td class="py-2 px-4">
+                            @if(strtolower($aktivitas->aktivitas) === 'login')
+                                <span class="px-2 py-1 rounded bg-green-100 text-green-700 font-semibold">Login</span>
+                            @elseif(strtolower($aktivitas->aktivitas) === 'logout')
+                                <span class="px-2 py-1 rounded bg-red-100 text-red-700 font-semibold">Logout</span>
+                            @else
+                                <span class="px-2 py-1 rounded bg-gray-100 text-gray-700 font-semibold">{{ $aktivitas->aktivitas }}</span>
+                            @endif
+                        </td>
+                        <td class="py-2 px-4">
+                            {{ $aktivitas->keterangan }}
+                            <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($aktivitas->tanggal)->diffForHumans() }})</span>
+                        </td>
                     </tr>
                 @empty
                     <tr>
