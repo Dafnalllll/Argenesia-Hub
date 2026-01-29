@@ -1,7 +1,7 @@
 <div wire:poll.5s class="bg-white/40 backdrop-blur-md rounded-2xl shadow-lg p-6 overflow-x-auto mb-8">
     <h3 class="text-lg font-bold mb-1 text-[#F53003]">Riwayat Aktivitas Terbaru</h3>
     <table class="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
-        <thead class="bg-gray-100">
+        <thead class="bg-[#F53003]">
             <tr class="text-left text-gray-700">
                 <th class="py-2 px-3 border-b border-gray-300">Tanggal</th>
                 <th class="py-2 px-3 border-b border-gray-300">Aktivitas</th>
@@ -25,12 +25,12 @@
                     </td>
                     <td class="py-2 px-3">
                         {{ $item->keterangan }}
-                        <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($item->tanggal)->diffForHumans() }})</span>
+                        <span class="text-xs text-gray-700">({{ \Carbon\Carbon::parse($item->tanggal)->diffForHumans() }})</span>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="3" class="py-2 px-3 text-center text-gray-500">Belum ada aktivitas.</td>
+                    <td colspan="3" class="py-2 px-3 text-center text-gray-700">Belum ada aktivitas.</td>
                 </tr>
             @endforelse
         </tbody>

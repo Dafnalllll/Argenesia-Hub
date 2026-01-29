@@ -1,5 +1,5 @@
 @section('title', 'Profil || Argenesia Hub')
-<div class="flex-1 flex items-start justify-center pt-8 pb-8  min-h-screen">
+<div class="flex-1 flex items-start justify-center pt-16 md:pt-8 pb-8 min-h-screen">
     <div class="relative w-full max-w-6xl mx-8 bg-white/60 backdrop-blur-2xl border border-white/40 rounded-3xl shadow-2xl p-10 flex flex-col gap-8 overflow-hidden">
         <!-- Decorative Gradient Blobs -->
         <div class="absolute -top-20 -left-20 w-60 h-60 bg-linear-to-br from-[#0074D9]/30 to-[#F53003]/20 rounded-full blur-2xl opacity-60 z-0"></div>
@@ -36,7 +36,7 @@
             @endif
         </div>
         <!-- Info Card -->
-        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 pt-16">
             <div class="bg-white/80 rounded-2xl shadow-lg p-5 flex flex-col gap-3 border border-[#0074D9]/10">
                 <label class="flex items-center gap-2 text-sm font-semibold text-[#F53003]">
                     <img src="{{ asset('img/auth/email.webp') }}" alt="Email" class="w-5 h-5" /> Email

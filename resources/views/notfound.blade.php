@@ -45,6 +45,8 @@
                     $user = auth()->user();
                     if (isset($user->role) && $user->role->name === 'Admin') {
                         $dashboardUrl = url('/dashboard/admin');
+                    } elseif (isset($user->role) && strtolower($user->role->name) === 'hr') {
+                        $dashboardUrl = url('/dashboard/hr');
                     } else {
                         $dashboardUrl = url('/dashboard');
                     }

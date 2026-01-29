@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Aktivitas;
 use App\Models\AktivitasAdmin;
+use App\Models\AktivitasHR;
 
 class LogoutButton extends Component
 {
@@ -22,6 +23,12 @@ class LogoutButton extends Component
             'tanggal' => now(),
             'aktivitas' => 'Logout',
             'keterangan' => 'Admin logout',
+        ]);
+
+        AktivitasHR::create([
+            'tanggal' => now(),
+            'aktivitas' => 'Logout',
+            'keterangan' => 'HR logout',
         ]);
 
         Auth::logout();

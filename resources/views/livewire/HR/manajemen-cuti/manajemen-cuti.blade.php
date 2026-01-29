@@ -2,7 +2,7 @@
 
 <div>
     {{-- Mobile View --}}
-    @include('livewire.admin.manajemen-cuti.manajemen-cuti-mobile')
+    @include('livewire.HR.manajemen-cuti.manajemen-cuti-mobile')
 
     {{-- Desktop View --}}
     <div class="hidden md:block p-6">
@@ -87,7 +87,7 @@
                 </table>
             </div>
             <div class="mt-6 flex justify-end">
-                <a href="/admin/manajemen-cuti/rekap-cuti"
+                <a href="/hr/manajemen-cuti/rekap-cuti"
                     class="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow hover:bg-indigo-600 transition font-semibold text-base flex items-center gap-2 group hover:scale-105 ">
                     <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round"/>

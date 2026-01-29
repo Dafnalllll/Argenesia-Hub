@@ -16,7 +16,10 @@ use App\Livewire\Dashboard\Cuti\Riwayat;
 use App\Livewire\Admin\ManajemenKaryawan;
 use App\Livewire\Dashboard\Cuti\Pengajuan;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
-
+use App\Livewire\HR\Dashboard\Dashboard as HRDashboard;
+use App\Livewire\HR\ManajemenCuti\RekapCuti as HRRekapCuti;
+use App\Livewire\HR\ManajemenKaryawan\ManajemenKaryawan as HRManajemenKaryawan;
+use App\Livewire\HR\ManajemenCuti\ManajemenCuti as HRManajemenCuti;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +53,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/manajemen-cuti/atur-tipe-cuti',AturTipeCuti::class)->name('atur-tipe-cuti');
         Route::get('/admin/manajemen-cuti/rekap-cuti',RekapCuti::class)->name('rekap-cuti');
 
+    });
+
+    Route::middleware([role::class . ':HR'])->group(function () {
+        Route::get('/dashboard/hr', HRDashboard::class)->name('dashboard.hr');
+        Route::get('/hr/manajemen-karyawan', HRManajemenKaryawan::class)->name('hr.manajemen-karyawan');
+        Route::get('/hr/manajemen-cuti/rekap-cuti', HRRekapCuti::class)->name('hr.manajemen-cuti.rekap-cuti');
+        Route::get('/hr/manajemen-cuti', HRManajemenCuti::class)->name('hr.manajemen-cuti');
     });
 });
 

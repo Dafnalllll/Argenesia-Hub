@@ -1,20 +1,14 @@
-@section('title', 'Riwayat Cuti || Argenesia Hub')
-<div>
-        {{-- MOBILE VIEW --}}
-    <div class="block md:hidden">
-        @include('livewire.Karyawan.dashboard.cuti.riwayat-mobile')
+{{-- filepath: d:\Dafa Code\Argenesia Hub\resources\views\livewire\Karyawan\dashboard\cuti\riwayat-mobile.blade.php --}}
+<div class="p-4 mt-20">
+    <div class="flex items-center justify-center gap-3 mb-4">
+        <img src="{{ asset('img/cuti/riwayat.webp') }}" alt="Riwayat" class="w-8 h-8 drop-shadow" />
+        <h1 class="text-xl font-bold text-white tracking-wide text-center">Riwayat Cuti</h1>
     </div>
-        {{-- DESKTOP VIEW --}}
-    <div class="p-6 hidden md:block">
-        <div class="flex items-center gap-3 mb-6">
-            <img src="{{ asset('img/cuti/riwayat.webp') }}" alt="Riwayat" class="w-10 h-10 drop-shadow" />
-            <h1 class="text-2xl font-bold text-white tracking-wide">Riwayat Cuti</h1>
-        </div>
-        <div class="w-287.5 max-w-8xl mx-auto bg-white/30 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 mt-12 border border-white/40 overflow-x-auto">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-                <div class="flex flex-col md:flex-row gap-6 w-full md:w-auto">
-                    <!-- Filter Kategori -->
-                    <div x-data="{ open: false }" class="relative group w-full md:w-48">
+    <div class="bg-white/30 backdrop-blur-xl rounded-2xl shadow-xl p-4 mt-4 border border-white/40">
+        <!-- Filter -->
+        <div class="flex flex-col gap-3 mb-4">
+            <!-- Filter Kategori -->
+            <div x-data="{ open: false }" class="relative group w-full md:w-48">
                         <img src="{{ asset('img/filter/tipe.webp') }}"
                             alt="Kategori"
                             class="absolute left-3 top-2.5 w-5 h-5 opacity-80 pointer-events-none transition-all duration-300 origin-center z-10
@@ -32,7 +26,7 @@
                                 @if($filterKategori)
                                     <span class="text-blue-700 font-semibold">{{ $filterKategori }}</span>
                                 @else
-                                    <span class="text-gray-700 font-semibold">Semua Tipe</span>
+                                    <span class="text-gray-700 font-semibold">Tipe</span>
                                 @endif
                             </span>
                             <span
@@ -49,7 +43,7 @@
                                 <li>
                                     <button wire:click="$set('filterKategori', '')" @click="open = false"
                                         class="cursor-pointer flex items-center w-full px-4 py-2 hover:bg-blue-50 rounded-lg transition text-gray-700 font-semibold">
-                                        <span class="mr-2">📂</span> Semua Tipe
+                                        <span class="mr-2 whitespace-nowrap">📂</span> Semua Tipe
                                     </button>
                                 </li>
                                 @foreach($tipe_cutis as $kategori)
@@ -63,12 +57,12 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- Filter Status Custom Dropdown -->
+                        <!-- Filter Status -->
                         <div x-data="{ open: false }" class="relative group w-full md:w-48">
-                            <img src="{{ asset('img/filter/status.webp') }}"
-                                alt="Status"
-                                class="absolute left-2 top-2 w-5 h-5 opacity-80 pointer-events-none transition-all duration-300 origin-center z-10"
-                            />
+                                        <img src="{{ asset('img/filter/status.webp') }}"
+                                            alt="Status"
+                                            class="absolute left-2 top-2 w-5 h-5 opacity-80 pointer-events-none transition-all duration-300 origin-center z-10"
+                                        />
                             <button
                                 @click="open = !open"
                                 @click.away="open = false"
@@ -91,7 +85,7 @@
                                         </span>
                                     @else
                                         <span class="text-gray-700 font-semibold flex items-center gap-1 text-base">
-                                            Semua Status
+                                            Status
                                         </span>
                                     @endif
                                 </span>
@@ -109,7 +103,7 @@
                                     <li>
                                         <button wire:click="$set('filterStatus', '')" @click="open = false"
                                             class="cursor-pointer flex items-center w-full px-3 py-2 hover:bg-blue-50 rounded transition text-gray-700 font-semibold text-sm">
-                                            <span class="mr-2">👥</span> Semua Status
+                                            <span class="mr-2 whitespace-nowrap">👥</span> Semua Status
                                         </button>
                                     </li>
                                     <li>
@@ -133,9 +127,8 @@
                                 </ul>
                             </div>
                         </div>
-                </div>
-                <!-- Reset Filters Button -->
-                <div class="shrink-0">
+            <!-- Reset Filter -->
+            <div class="shrink-0">
                     <button
                         wire:click="resetFilter"
                         class="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold shadow-md transition-all duration-300 hover:bg-gray-200 cursor-pointer hover:scale-105 hover:shadow-lg"
@@ -145,10 +138,11 @@
                         </svg>
                         Reset
                     </button>
-                </div>
             </div>
-            <div class="overflow-x-auto rounded-2xl shadow">
-                <table class="min-w-full text-sm text-left">
+        </div>
+        <!-- Riwayat List -->
+        <div class="overflow-x-auto w-75 rounded-2xl shadow">
+                <table class="min-w-125 text-sm text-left">
                     <thead class="bg-linear-to-r from-[#0074D9]/80 to-[#F53003]/80 text-white uppercase">
                         <tr>
                             <th class="px-4 py-3">No</th>
@@ -197,12 +191,11 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center py-8 text-gray-700">Tidak ada data cuti.</td>
+                            <td colspan="8" class="text-center py-8 text-gray-400">Tidak ada data cuti.</td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-        </div>
     </div>
 </div>

@@ -24,7 +24,7 @@
             @include('components.sidebar')
         @endif
         <div class="flex-1 flex items-start justify-center
-            @if (!in_array(Route::currentRouteName(), ['login', 'register'])) ml-56 @endif">
+            @if (!in_array(Route::currentRouteName(), ['login', 'register'])) ml-0 md:ml-56 @endif">
             @hasSection('content')
                 @yield('content')
             @else
@@ -43,6 +43,26 @@
             window.location.href = '/login';
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const disabledRoutes = [
+                '/hr/manajemen-cuti/rekap-cuti',
+                '/hr/manajemen-cuti',
+            ];
+            if (disabledRoutes.some(route => window.location.pathname.startsWith(route))) {
+                if (window.AOS) {
+                    AOS.init({ disable: true });
+                }
+            }
+        });
+    </script>
     @livewireScripts
 </body>
 </html>
+
+<style>
+    html, body {
+        max-width: 500vw;
+        overflow-x: hidden;
+    }
+</style>
