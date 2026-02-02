@@ -11,7 +11,7 @@
             </thead>
             <tbody>
                 @forelse ($aktivitasAdmin as $aktivitas)
-                    <tr class="hover:bg-pink-100 transition text-center animate-fade-in-up">
+                    <tr class="hover:bg-gray-100 transition text-center animate-fade-in-up">
                         <td class="py-2 px-3">{{ $aktivitas->tanggal }}</td>
                         <td class="py-2 px-4">
                             @if(strtolower($aktivitas->aktivitas) === 'login')

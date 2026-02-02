@@ -31,7 +31,9 @@
                 </span>
             @endunless
         </div>
-        <span class="text-lg font-semibold text-white">Selamat Datang, {{ Auth::user()->name }}</span>
+        <span class="hidden md:inline text-lg font-semibold text-white">
+            Selamat Datang, {{ Auth::user()->name }}
+        </span>
         <a href="/profil">
             <img src="{{ (Auth::user()->karyawan && Auth::user()->karyawan->foto) ? asset(Auth::user()->karyawan->foto) : asset('img/sidebar/profil.webp') }}"
                 alt="Foto Profil"
@@ -91,36 +93,78 @@
             <table class="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
                 <thead class="bg-[#0074D9]">
                     <tr class="text-left text-gray-700">
-                        <th class="py-2 px-3 border-b border-gray-300">Tanggal</th>
-                        <th class="py-2 px-3 border-b border-gray-300">Tipe</th>
-                        <th class="py-2 px-3 border-b border-gray-300">Status</th>
+                        <th class="py-2 px-3 border-b border-gray-300 text-left">Tanggal</th>
+                        <th class="py-2 px-3 border-b border-gray-300 text-left">Tipe</th>
+                        <th class="py-2 px-3 border-b border-gray-300 text-center">Status</th>
+                        <th class="py-2 px-3 border-b border-gray-300 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($pengajuanTerbaru as $item)
-        <tr>
-            <td class="py-2 px-3">{{ $item->tanggal_mulai }}</td>
-            <td class="py-2 px-3">{{ $item->tipeCuti->nama_cuti ?? '-' }}</td>
-            <td class="py-2 px-3">
-                <span class="px-3 py-1 rounded-full font-semibold border
-                    @if($item->status == 'Disetujui')
-                        border-green-500 text-green-700 bg-green-50
-                    @elseif($item->status == 'Ditolak')
-                        border-red-500 text-red-700 bg-red-50
-                    @else
-                        border-yellow-500 text-yellow-700 bg-yellow-50
-                    @endif">
-                    {{ $item->status }}
-                </span>
-            </td>
-        </tr>
-    @empty
-        <tr>
-            <td colspan="3" class="py-2 px-3 text-center text-gray-700">Belum ada pengajuan cuti.</td>
-        </tr>
-    @endforelse
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="py-2 px-3">{{ $item->tanggal_mulai }}</td>
+                    <td class="py-2 px-3">{{ $item->tipeCuti->nama_cuti ?? '-' }}</td>
+                    <td class="py-2 px-3 text-center    ">
+                        <span class="px-3 py-1 rounded-full font-semibold border
+                            @if($item->status == 'Disetujui')
+                                border-green-500 text-green-700 bg-green-50
+                            @elseif($item->status == 'Ditolak')
+                                border-red-500 text-red-700 bg-red-50
+                            @else
+                                border-yellow-500 text-yellow-700 bg-yellow-50
+                            @endif">
+                            {{ $item->status }}
+                        </span>
+                    </td>
+                    <td class="py-2 px-4">
+                        <div class="flex items-center justify-center gap-4">
+                            <a href="{{ route('cuti.pengajuan.edit', $item->id) }}" title="Edit">
+                                <img src="{{ asset('img/action/edit.webp') }}" alt="Edit" class="w-6 h-6 cursor-pointer hover:scale-110 transition" />
+                            </a>
+                            <button type="button" title="Delete" class="focus:outline-none"
+                                wire:click="confirmDelete({{ $item->id }})">
+                                <img src="{{ asset('img/action/delete.webp') }}" alt="Delete" class="w-6 h-6 cursor-pointer hover:scale-110 transition" />
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                    <tr class="hover:bg-gray-50 transition">
+                        <td colspan="4" class="py-2 px-3 text-center text-gray-700">Belum ada pengajuan cuti.</td>
+                    </tr>
+                @endforelse
                 </tbody>
             </table>
+        </div>
+
+        {{-- Modal Konfirmasi Hapus Pengajuan Cuti --}}
+        <div
+            x-data="{ show: @entangle('showDeleteModal') }"
+            x-show="show"
+            x-transition
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            style="display: none;"
+        >
+            <div class="bg-linear-to-r from-[#F53003] to-[#0074D9] rounded-xl p-8 shadow-lg w-full max-w-md relative">
+                <button @click="show = false; $wire.showDeleteModal = false" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl cursor-pointer">&times;</button>
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" class="text-red-100" fill="currentColor"/>
+                        <path d="M9 9l6 6M15 9l-6 6" stroke="red" stroke-width="2" fill="none"/>
+                    </svg>
+                    <h2 class="text-xl font-bold text-white">Konfirmasi Hapus</h2>
+                </div>
+                <p class="mb-6 text-gray-700 text-base">
+                    Yakin ingin menghapus pengajuan cuti ini? Data yang dihapus <b>tidak dapat dikembalikan</b>.
+                </p>
+                <div class="flex justify-end gap-2">
+                    <button @click="show = false; $wire.showDeleteModal = false" class="px-4 py-2 rounded bg-linear-to-r from-[#F53003] to-[#0074D9] text-gray-700 font-semibold cursor-pointer hover:scale-105 transition-all">Batal</button>
+                    <button
+                        @click="$wire.deletePengajuan()"
+                        class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer hover:scale-105 transition-all"
+                    >Hapus</button>
+                </div>
+            </div>
         </div>
         <!-- Riwayat Kegiatan User-->
             <livewire:dashboard.aktivitas-table />

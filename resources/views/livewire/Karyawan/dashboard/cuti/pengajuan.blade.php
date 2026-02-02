@@ -86,24 +86,27 @@
                 if ($refs.fileInput) $refs.fileInput.value = '';
             "
             @submit.prevent="
-                if (!tipe_cuti_id) {
-                    Swal.fire({icon:'warning', title:'Tipe Cuti wajib dipilih!', confirmButtonColor:'#0074D9'});
-                    return false;
-                }
-                if (!tanggal_mulai) {
-                    Swal.fire({icon:'warning', title:'Tanggal Mulai wajib diisi!', confirmButtonColor:'#0074D9'});
-                    return false;
-                }
-                if (!keterangan) {
-                    Swal.fire({icon:'warning', title:'Keterangan wajib diisi!', confirmButtonColor:'#0074D9'});
-                    return false;
-                }
+            if (!tipe_cuti_id) {
+                Swal.fire({icon:'warning', title:'Tipe Cuti wajib dipilih!', confirmButtonColor:'#0074D9'});
+                return false;
+            }
+            if (!tanggal_mulai) {
+                Swal.fire({icon:'warning', title:'Tanggal Mulai wajib diisi!', confirmButtonColor:'#0074D9'});
+                return false;
+            }
+            if (!keterangan) {
+                Swal.fire({icon:'warning', title:'Keterangan wajib diisi!', confirmButtonColor:'#0074D9'});
+                return false;
+            }
+            // Hanya wajib upload file jika tambah baru
+            @if(!$isEdit)
                 if (!$refs.fileInput.value) {
                     Swal.fire({icon:'warning', title:'File wajib diupload!', confirmButtonColor:'#0074D9'});
                     return false;
                 }
-                $wire.simpan();
-            "
+            @endif
+            $wire.simpan();
+        "
             class="space-y-6 md:space-y-8"
             novalidate
         >
@@ -234,11 +237,30 @@
                 @error('file_upload')
                     <div class="text-red-600 text-xs mt-2">{{ $message }}</div>
                 @enderror
+
+                @if($isEdit && $file_pengajuan_lama)
+                    <div class="mt-4 flex items-center gap-3 bg-white/80 border border-[#0074D9]/30 rounded-lg px-4 py-3 shadow transition-all">
+                        <img src="{{ asset('img/export/pdf.webp') }}" alt="PDF" class="w-8 h-8 mr-2 drop-shadow" />
+                        <div class="flex-1">
+                            <div class="font-semibold text-gray-700 text-sm mb-1">File Pengajuan Lama</div>
+                            <div class="text-xs text-gray-500 truncate max-w-xs">
+                                {{ basename($file_pengajuan_lama) }}
+                            </div>
+                        </div>
+                        <a href="{{ asset('storage/' . $file_pengajuan_lama) }}" target="_blank"
+                        class="inline-flex items-center gap-1 px-3 py-1 rounded bg-[#0074D9] text-white text-xs font-bold shadow hover:bg-[#005fa3] transition"
+                        title="Download File">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 4v12"/>
+                            </svg>
+                            Download
+                        </a>
+                    </div>
+                @endif
             </div>
             <div class="flex flex-col md:flex-row gap-3 justify-center md:justify-end">
                 <button type="button"
                     wire:click="resetForm"
-                    @click="window.dispatchEvent(new CustomEvent('reset-cuti-form'))"
                     class="bg-gray-200 text-gray-700 px-8 py-3 rounded-xl font-bold shadow hover:bg-gray-300 hover:scale-105 transition-all duration-200 text-lg tracking-wide flex items-center justify-center gap-2 cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>

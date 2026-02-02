@@ -39,7 +39,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/profil', Profil::class)->name('profil');
     Route::get('/cuti', Cuti::class)->name('cuti');
-    Route::get('/cuti/pengajuan', Pengajuan::class)->name('cuti.pengajuan');
+    Route::get('/cuti/pengajuan/', Pengajuan::class)->name('cuti.pengajuan.create');
+    Route::get('/cuti/pengajuan/{id}', Pengajuan::class)->name('cuti.pengajuan.edit');
     Route::get('/cuti/riwayat', Riwayat::class)->name('cuti.riwayat');
     Route::get('/cuti/download-template', function () {
         return response()->download(public_path('files/template_surat_cuti_argenesia.docx'));
@@ -51,7 +52,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/manajemen-user', ManajemenUser::class)->name('manajemen-user');
         Route::get('/admin/manajemen-karyawan', ManajemenKaryawan::class)->name('manajemen-karyawan');
         Route::get('/admin/manajemen-cuti',ManajemenCuti::class)->name('manajemen-cuti');
-        Route::get('/admin/manajemen-cuti/atur-tipe-cuti',AturTipeCuti::class)->name('atur-tipe-cuti');
+        Route::get('/admin/manajemen-cuti/atur-tipe-cuti/', AturTipeCuti::class)->name('admin.manajemen-cuti.atur-tipe-cuti.create');
+        Route::get('/admin/manajemen-cuti/atur-tipe-cuti/{id}', AturTipeCuti::class)->name('admin.manajemen-cuti.atur-tipe-cuti.edit');
         Route::get('/admin/manajemen-cuti/rekap-cuti',RekapCuti::class)->name('rekap-cuti');
 
     });

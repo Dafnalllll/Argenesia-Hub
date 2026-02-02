@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\TipeCuti;
 use App\Models\PengajuanCuti;
-use App\Models\Aktivitas as AktivitasModel; // Tambahkan di atas
+use App\Models\Aktivitas as AktivitasModel;
 use Illuminate\Support\Facades\Auth;
 
 class Pengajuan extends Component
@@ -21,9 +21,39 @@ class Pengajuan extends Component
     public $maksimal_hari = null;
     public $file_upload;
 
-    public function mount()
+    // Tambahan untuk edit
+    public $isEdit = false;
+    public $editId = null;
+    public $file_pengajuan_lama = null;
+
+    public $initialData = [];
+
+    // Terima $id dari route jika edit
+    public function mount($id = null)
     {
         $this->tipeCutis = TipeCuti::all();
+
+        if ($id) {
+            $this->isEdit = true;
+            $this->editId = $id;
+            $pengajuan = PengajuanCuti::findOrFail($id);
+
+            $this->tipe_cuti_id = $pengajuan->tipe_cuti_id;
+            $this->tanggal_mulai = $pengajuan->tanggal_mulai;
+            $this->tanggal_selesai = $pengajuan->tanggal_selesai;
+            $this->keterangan = $pengajuan->keterangan;
+            $this->maksimal_hari = $pengajuan->tipeCuti->maksimal_hari ?? null;
+            $this->file_pengajuan_lama = $pengajuan->file_pengajuan;
+
+            // Simpan data awal
+            $this->initialData = [
+                'tipe_cuti_id' => $pengajuan->tipe_cuti_id,
+                'tanggal_mulai' => $pengajuan->tanggal_mulai,
+                'tanggal_selesai' => $pengajuan->tanggal_selesai,
+                'keterangan' => $pengajuan->keterangan,
+                'file_pengajuan_lama' => $pengajuan->file_pengajuan,
+            ];
+        }
     }
 
     public function updatedTipeCutiId()
@@ -72,60 +102,111 @@ class Pengajuan extends Component
             return;
         }
 
-        $this->validate([
-            'tipe_cuti_id' => 'required|exists:tipe_cutis,id',
-            'tanggal_mulai' => 'required|date',
-            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
-            'keterangan' => 'required|string|max:255',
-            'file_upload' => 'required|file|mimes:pdf|max:5120',
-        ]);
-
-        if (!$this->tanggal_selesai) {
-            $this->hitungTanggalSelesai();
+        // Validasi dinamis
+        if ($this->isEdit) {
+            $rules = [
+                'tipe_cuti_id' => 'nullable|exists:tipe_cutis,id',
+                'tanggal_mulai' => 'nullable|date',
+                'tanggal_selesai' => 'nullable|date|after_or_equal:tanggal_mulai',
+                'keterangan' => 'nullable|string|max:255',
+                'file_upload' => 'nullable|file|mimes:pdf|max:5120',
+            ];
+        } else {
+            $rules = [
+                'tipe_cuti_id' => 'required|exists:tipe_cutis,id',
+                'tanggal_mulai' => 'required|date',
+                'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+                'keterangan' => 'required|string|max:255',
+                'file_upload' => 'required|file|mimes:pdf|max:5120',
+            ];
         }
 
-        if (!$this->tanggal_selesai) {
-            session()->flash('error', 'Tanggal selesai tidak boleh kosong!');
-            return;
+        $this->validate($rules);
+
+        // Ambil data lama jika field kosong saat edit
+        if ($this->isEdit && $this->editId) {
+            $pengajuan = PengajuanCuti::findOrFail($this->editId);
+
+            $pengajuan->update([
+                'tipe_cuti_id' => $this->tipe_cuti_id ?: $pengajuan->tipe_cuti_id,
+                'tanggal_mulai' => $this->tanggal_mulai ?: $pengajuan->tanggal_mulai,
+                'tanggal_selesai' => $this->tanggal_selesai ?: $pengajuan->tanggal_selesai,
+                'keterangan' => $this->keterangan ?: $pengajuan->keterangan,
+                'file_pengajuan' => $this->file_upload
+                    ? $this->file_upload->store('pengajuan_cuti_files', 'public')
+                    : $pengajuan->file_pengajuan,
+            ]);
+
+            AktivitasModel::create([
+                'user_id' => Auth::id(),
+                'tanggal' => now(),
+                'aktivitas' => 'Update Pengajuan Cuti',
+                'keterangan' => 'Update cuti: ' . TipeCuti::find($pengajuan->tipe_cuti_id)?->nama_cuti,
+            ]);
+
+            session()->flash('success', 'Pengajuan cuti berhasil diperbarui!');
+        } else {
+            PengajuanCuti::create([
+                'user_id' => Auth::id(),
+                'karyawan_id' => $karyawan->id,
+                'tipe_cuti_id' => $this->tipe_cuti_id,
+                'tanggal_mulai' => $this->tanggal_mulai,
+                'tanggal_selesai' => $this->tanggal_selesai,
+                'keterangan' => $this->keterangan,
+                'status' => 'Menunggu',
+                'file_pengajuan' => $this->file_upload
+                    ? $this->file_upload->store('pengajuan_cuti_files', 'public')
+                    : null,
+            ]);
+
+            AktivitasModel::create([
+                'user_id' => Auth::id(),
+                'tanggal' => now(),
+                'aktivitas' => 'Pengajuan Cuti',
+                'keterangan' => 'Berhasil mengajukan cuti: ' . TipeCuti::find($this->tipe_cuti_id)?->nama_cuti,
+            ]);
+
+            session()->flash('success', 'Pengajuan cuti berhasil diajukan!');
         }
 
-        $filePath = null;
-        if ($this->file_upload) {
-            $filePath = $this->file_upload->store('pengajuan_cuti_files', 'public');
+        if ($this->isEdit && $this->editId) {
+            // JANGAN RESET FORM DI SINI!
+            // $this->reset([...]);
+        } else {
+            $this->reset(['tipe_cuti_id', 'tanggal_mulai', 'tanggal_selesai', 'keterangan', 'file_upload', 'file_pengajuan_lama', 'isEdit', 'editId']);
         }
-
-        PengajuanCuti::create([
-            'user_id' => Auth::id(),
-            'karyawan_id' => $karyawan->id, // <-- tambahkan ini!
-            'tipe_cuti_id' => $this->tipe_cuti_id,
-            'tanggal_mulai' => $this->tanggal_mulai,
-            'tanggal_selesai' => $this->tanggal_selesai,
-            'keterangan' => $this->keterangan,
-            'status' => 'Menunggu',
-            'file_pengajuan' => $filePath,
-        ]);
-
-        // Tambahkan aktivitas
-        AktivitasModel::create([
-            'user_id' => Auth::id(),
-            'tanggal' => now(),
-            'aktivitas' => 'Pengajuan Cuti',
-            'keterangan' => 'Berhasil mengajukan cuti: ' . TipeCuti::find($this->tipe_cuti_id)?->nama_cuti,
-        ]);
-
-        $this->reset(['tipe_cuti_id', 'tanggal_mulai', 'tanggal_selesai', 'keterangan', 'file_upload']);
-        session()->flash('success', 'Pengajuan cuti berhasil diajukan!');
     }
 
     public function resetForm()
     {
-        $this->reset(['tipe_cuti_id', 'tanggal_mulai', 'tanggal_selesai', 'keterangan']);
+        if ($this->isEdit && $this->editId) {
+            // Ambil data terbaru dari database
+            $pengajuan = PengajuanCuti::find($this->editId);
+            if ($pengajuan) {
+                $this->tipe_cuti_id = $pengajuan->tipe_cuti_id;
+                $this->tanggal_mulai = $pengajuan->tanggal_mulai;
+                $this->tanggal_selesai = $pengajuan->tanggal_selesai;
+                $this->keterangan = $pengajuan->keterangan;
+                $this->file_upload = null;
+                $this->file_pengajuan_lama = $pengajuan->file_pengajuan;
+            }
+        } else {
+            // Reset ke kosong (mode tambah)
+            $this->tipe_cuti_id = '';
+            $this->tanggal_mulai = '';
+            $this->tanggal_selesai = '';
+            $this->keterangan = '';
+            $this->file_upload = null;
+            $this->file_pengajuan_lama = null;
+        }
     }
 
     public function render()
     {
         return view('livewire.karyawan.dashboard.cuti.pengajuan', [
-            'tipeCutis' => $this->tipeCutis
+            'tipeCutis' => $this->tipeCutis,
+            'isEdit' => $this->isEdit,
+            'file_pengajuan_lama' => $this->file_pengajuan_lama,
         ]);
     }
 }

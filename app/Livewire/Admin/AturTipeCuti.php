@@ -5,13 +5,33 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\TipeCuti;
 use App\Models\PengajuanCuti;
-use App\Models\AktivitasAdmin; // Tambahkan di atas
+use App\Models\AktivitasAdmin;
+use Illuminate\Support\Facades\Auth;
 
 class AturTipeCuti extends Component
 {
-    public $nama_cuti;
-    public $maksimal_hari;
+    public $editId = null;
+    public $nama_cuti, $maksimal_hari;
     public $filterKategori = '';
+
+    public function mount($id = null)
+    {
+        if ($id) {
+            $tipe = TipeCuti::findOrFail($id);
+            $this->nama_cuti = $tipe->nama_cuti;
+            $this->maksimal_hari = $tipe->maksimal_hari;
+            // Simpan id jika perlu update
+            $this->editId = $id;
+        }
+    }
+
+    public function edit($id)
+    {
+        $tipe = TipeCuti::findOrFail($id);
+        $this->editId = $id;
+        $this->nama_cuti = $tipe->nama_cuti;
+        $this->maksimal_hari = $tipe->maksimal_hari;
+    }
 
     public function simpan()
     {
@@ -20,21 +40,39 @@ class AturTipeCuti extends Component
             'maksimal_hari' => 'required|integer|min:1',
         ]);
 
-        TipeCuti::create([
-            'nama_cuti' => $this->nama_cuti,
-            'maksimal_hari' => $this->maksimal_hari,
-        ]);
+        if ($this->editId) {
+            $tipe = TipeCuti::findOrFail($this->editId);
+            $tipe->update([
+                'nama_cuti' => $this->nama_cuti,
+                'maksimal_hari' => $this->maksimal_hari,
+            ]);
+            session()->flash('success', 'Tipe cuti berhasil diperbarui!');
 
-        AktivitasAdmin::create([
-            'tanggal' => now(),
-            'aktivitas' => 'Tambah Tipe Cuti',
-            'keterangan' => 'Menambahkan tipe cuti: ' . $this->nama_cuti,
-        ]);
+            // Catat aktivitas update
+            AktivitasAdmin::create([
+                'user_id' => Auth::id(),
+                'tanggal' => now(),
+                'aktivitas' => 'Update Tipe Cuti',
+                'keterangan' => 'Memperbarui tipe cuti: ' . $this->nama_cuti,
+            ]);
+        } else {
+            TipeCuti::create([
+                'nama_cuti' => $this->nama_cuti,
+                'maksimal_hari' => $this->maksimal_hari,
+            ]);
+            session()->flash('success', 'Tipe cuti berhasil ditambahkan!');
 
-        $this->reset(['nama_cuti', 'maksimal_hari']);
-        session()->flash('success', 'Tipe cuti berhasil ditambahkan!');
+            // Catat aktivitas tambah
+            AktivitasAdmin::create([
+                'user_id' => Auth::id(),
+                'tanggal' => now(),
+                'aktivitas' => 'Tambah Tipe Cuti',
+                'keterangan' => 'Menambah tipe cuti: ' . $this->nama_cuti,
+            ]);
 
-        // Ganti emit dengan dispatch
+            $this->reset(['editId', 'nama_cuti', 'maksimal_hari']);
+        }
+
         $this->dispatch('aktivitasAdminUpdated');
     }
 
@@ -46,6 +84,20 @@ class AturTipeCuti extends Component
     public function decrementHari()
     {
         $this->maksimal_hari = max(1, ($this->maksimal_hari ?? 1) - 1);
+    }
+
+    public function resetEdit()
+    {
+        if ($this->editId) {
+            $tipe = TipeCuti::find($this->editId);
+            if ($tipe) {
+                $this->nama_cuti = $tipe->nama_cuti;
+                $this->maksimal_hari = $tipe->maksimal_hari;
+            }
+        } else {
+            $this->nama_cuti = '';
+            $this->maksimal_hari = '';
+        }
     }
 
     public function render()

@@ -95,6 +95,77 @@
                 </table>
             </div>
         </div>
+
+        <!-- Tabel List Tipe Cuti -->
+        <div class="bg-white/30 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">List Tipe Cuti Tersedia</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm text-gray-700">
+                    <thead>
+                        <tr class="bg-[#16a34a] text-white">
+                            <th class="py-3 px-4 rounded-tl-2xl text-center">No</th>
+                            <th class="py-3 px-4 text-center">Tipe Cuti</th>
+                            <th class="py-3 px-4 text-center">Jumlah Hari</th>
+                            <th class="py-3 px-4 rounded-tr-2xl text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @forelse($tipeCutis as $i => $tipe)
+                        <tr class="hover:bg-gray-100 transition text-center">
+                            <td class="py-2 px-4">{{ $i + 1 }}</td>
+                            <td class="py-2 px-4">{{ $tipe->nama_cuti }}</td>
+                            <td class="py-2 px-4">{{ $tipe->maksimal_hari ?? '-' }}</td>
+                            <td class="py-2 px-4 flex justify-center gap-2">
+                                <a href="{{ route('admin.manajemen-cuti.atur-tipe-cuti.edit', $tipe->id) }}"
+                                    title="Edit">
+                                    <img src="{{ asset('img/action/edit.webp') }}" alt="Edit" class="w-5 h-5 inline cursor-pointer hover:scale-110 transition" />
+                                </a>
+                                <button type="button" title="Delete" class="focus:outline-none"
+                                    wire:click="confirmDelete({{ $tipe->id }})">
+                                    <img src="{{ asset('img/action/delete.webp') }}" alt="Delete" class="w-6 h-6 cursor-pointer hover:scale-110 transition" />
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="py-6 text-center text-gray-800">Tidak ada tipe cuti tersedia.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- Modal Konfirmasi Hapus Pengajuan Cuti --}}
+        <div
+            x-data="{ show: @entangle('showDeleteModal') }"
+            x-show="show"
+            x-transition
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            style="display: none;"
+        >
+            <div class="bg-linear-to-r from-[#F53003] to-[#0074D9] rounded-xl p-8 shadow-lg w-full max-w-md relative">
+                <button @click="show = false; $wire.showDeleteModal = false" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl cursor-pointer">&times;</button>
+                <div class="flex items-center gap-3 mb-4">
+                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" class="text-red-100" fill="currentColor"/>
+                        <path d="M9 9l6 6M15 9l-6 6" stroke="red" stroke-width="2" fill="none"/>
+                    </svg>
+                    <h2 class="text-xl font-bold text-white">Konfirmasi Hapus</h2>
+                </div>
+                <p class="mb-6 text-gray-700 text-base">
+                    Yakin ingin menghapus tipe cuti ini? Data yang dihapus <b>tidak dapat dikembalikan</b>.
+                </p>
+                <div class="flex justify-end gap-2">
+                    <button @click="show = false; $wire.showDeleteModal = false" class="px-4 py-2 rounded bg-linear-to-r from-[#F53003] to-[#0074D9] text-gray-700 font-semibold cursor-pointer hover:scale-105 transition-all">Batal</button>
+                    <button
+                        @click="$wire.deletePengajuan()"
+                        class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white font-semibold cursor-pointer hover:scale-105 transition-all"
+                    >Hapus</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Tabel Riwayat Aktivitas Admin -->
         <livewire:Admin.AktivitasAdminTable />
     </div>

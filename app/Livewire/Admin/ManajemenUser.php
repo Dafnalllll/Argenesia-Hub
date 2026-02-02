@@ -88,7 +88,7 @@ class ManajemenUser extends Component
                 'keterangan' => 'Admin mengubah status user ID ' . $id . ' menjadi ' . $status,
             ]);
 
-            session()->flash('success', 'Status User Berhasil Diubah.');
+            session()->flash('success', 'Status User Berhasil Diubah Menjadi ' . $status );
             return ['status' => $user->status];
         } else if ($type === 'karyawan') {
             $karyawan = \App\Models\Karyawan::find($id);

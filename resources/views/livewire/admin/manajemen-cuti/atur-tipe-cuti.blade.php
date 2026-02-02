@@ -15,32 +15,15 @@
             </div>
         @endif
         <!-- Form tambah tipe cuti -->
-        <form
-            x-data="{
-                nama_cuti: @entangle('nama_cuti'),
-                maksimal_hari: @entangle('maksimal_hari'),
-            }"
-            @submit.prevent="
-                if (!nama_cuti) {
-                    Swal.fire({icon:'warning', title:'Nama tipe cuti wajib diisi!', confirmButtonColor:'#F53003'});
-                    return false;
-                }
-                if (!maksimal_hari) {
-                    Swal.fire({icon:'warning', title:'Jumlah hari wajib diisi!', confirmButtonColor:'#F53003'});
-                    return false;
-                }
-                $wire.simpan();
-            "
-            class="space-y-8"
-        >
+        <form wire:submit.prevent="simpan" class="space-y-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="relative group mb-6">
                     <label class="flex items-center gap-2 font-bold text-lg text-[#0074D9] mb-2">
                         <img src="{{ asset('img/cuti/kategori.webp') }}" alt="Kategori" class="w-6 h-6" />
                         Nama Tipe Cuti
                     </label>
-                    <input type="text" wire:model="nama_cuti" x-model="nama_cuti"
-                        class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9]/30 bg-white/90 text-gray-700 font-semibold
+                    <input type="text" wire:model="nama_cuti"
+                        class="w-full px-4 py-3 text-center md:text-left rounded-xl border-2 border-[#0074D9]/30 bg-white/90 text-gray-700 font-semibold
                         transition-all duration-300
                         focus:border-[#F53003] outline-none focus:scale-105 focus:shadow-xl
                         hover:border-[#F53003] hover:shadow-md"
@@ -53,7 +36,7 @@
                         Jumlah Hari
                     </label>
                     <div class="flex items-center gap-2">
-                        <input type="number" wire:model="maksimal_hari" x-model="maksimal_hari" min="1"
+                        <input type="number" wire:model="maksimal_hari" min="1"
                             class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9] focus:border-[#F53003] bg-white/90 text-gray-700 font-semibold text-lg text-center transition-all duration-300 outline-none  focus:scale-105 focus:shadow-xl
                         hover:border-[#F53003] hover:shadow-md"
                             placeholder="Contoh: 12">
@@ -62,8 +45,8 @@
                 </div>
             </div>
             <div class="flex flex-col md:flex-row justify-end gap-3 md:gap-4">
-                <button type="reset"
-                    wire:click="$set('nama_cuti', ''); $set('maksimal_hari', '');"
+                <button type="button"
+                    wire:click="resetEdit"
                     class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-8 py-3 rounded-xl hover:scale-105 font-bold shadow transition-all duration-200 text-lg tracking-wide flex items-center justify-center md:justify-start gap-2 cursor-pointer">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
@@ -75,7 +58,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                    Simpan
+                    {{ $editId ? 'Perbarui' : 'Simpan' }}
                 </button>
             </div>
         </form>

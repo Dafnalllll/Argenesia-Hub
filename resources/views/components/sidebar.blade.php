@@ -412,6 +412,11 @@
                 </ul>
             @else
                 {{-- Sidebar untuk User/Employee --}}
+                <div class="w-full flex flex-col items-center justify-center py-6 mb-4 ">
+                    <span class="text-lg font-bold text-white tracking-wide drop-shadow text-center">
+                        Selamat Datang, <span class="text-xl font-extrabold tracking-wider">{{ Auth::user()->name }}</span>
+                    </span>
+                </div>
                 <ul class="space-y-12">
                     <li>
                         <a href="/dashboard" class="group flex items-center px-3 py-2 rounded-lg transition relative

@@ -95,21 +95,36 @@
                 Lihat Lebih Lengkap
             </a>
         </div>
-        <!-- Modal Detail Pengajuan Cuti (opsional, jika ingin tampilkan detail) -->
-        @if($showDetailModal && $selectedCuti)
-            <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                <div class="bg-linear-to-r from-[#F53003] to-[#0074D9] rounded-xl p-8 shadow-lg w-full max-w-md relative">
-                    <button wire:click="$set('showDetailModal', false)" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-2xl cursor-pointer">&times;</button>
-                    <h3 class="text-xl font-bold mb-4 text-indigo-700">Detail Pengajuan Cuti</h3>
-                    <div class="mb-2"><span class="font-semibold">Nama :</span> {{ $selectedCuti->karyawan->user->name ?? '-' }}</div>
-                    <div class="mb-2"><span class="font-semibold">Tanggal Pengajuan :</span> {{ \Carbon\Carbon::parse($selectedCuti->tanggal_pengajuan)->format('Y-m-d') }}</div>
-                    <div class="mb-2"><span class="font-semibold">Tipe :</span> {{ $selectedCuti->tipeCuti->nama_cuti ?? '-' }}</div>
-                    <div class="mb-2"><span class="font-semibold">Status :</span> {{ $selectedCuti->status }}</div>
-                    <div class="mb-2"><span class="font-semibold">Tanggal Mulai :</span> {{ \Carbon\Carbon::parse($selectedCuti->tanggal_mulai)->format('Y-m-d') }}</div>
-                    <div class="mb-2"><span class="font-semibold">Tanggal Selesai :</span> {{ \Carbon\Carbon::parse($selectedCuti->tanggal_selesai)->format('Y-m-d') }}</div>
-                    <div class="mb-2"><span class="font-semibold">Keterangan :</span> {{ $selectedCuti->keterangan }}</div>
+    </div>
+        {{-- Modal Detail Pengajuan Cuti --}}
+        <div 
+            x-data="{ show: @entangle('showDetailModal') }"
+            x-show="show"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+            style="display: none;"
+        >
+            <div class="bg-linear-to-r from-[#F53003] to-[#0074D9] rounded-xl p-8 shadow-lg w-full max-w-md relative">
+                <button @click="show = false; $wire.set('showDetailModal', false)" class="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-2xl cursor-pointer">&times;</button>
+                <h3 class="font-bold text-lg mb-4 text-white flex items-center gap-3">
+                    <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Cuti" class="w-8 h-8" />
+                    Detail Pengajuan Cuti
+                </h3>
+                @if($selectedCuti)
+                    <div class="mb-2"><b>Nama:</b> <span>{{ $selectedCuti->karyawan->user->name ?? '-' }}</span></div>
+                    <div class="mb-2"><b>Tanggal Pengajuan:</b> <span>{{ \Carbon\Carbon::parse($selectedCuti->tanggal_pengajuan)->format('Y-m-d') }}</span></div>
+                    <div class="mb-2"><b>Tipe:</b> <span>{{ $selectedCuti->tipeCuti->nama_cuti ?? '-' }}</span></div>
+                    <div class="mb-2"><b>Status:</b> <span>{{ $selectedCuti->status }}</span></div>
+                    <div class="mb-2"><b>Tanggal Mulai:</b> <span>{{ \Carbon\Carbon::parse($selectedCuti->tanggal_mulai)->format('Y-m-d') }}</span></div>
+                    <div class="mb-2"><b>Tanggal Selesai:</b> <span>{{ \Carbon\Carbon::parse($selectedCuti->tanggal_selesai)->format('Y-m-d') }}</span></div>
+                    <div class="mb-2"><b>Keterangan:</b> <span>{{ $selectedCuti->keterangan }}</span></div>
                     <div class="mb-2 flex items-center gap-2">
-                        <span class="font-semibold">File Pengajuan :</span>
+                        <b>File Pengajuan:</b>
                         @if($selectedCuti->file_pengajuan)
                             <a href="{{ asset('storage/' . $selectedCuti->file_pengajuan) }}" target="_blank"
                                 class="inline-flex items-center px-3 py-1 rounded bg-indigo-500 text-white hover:bg-indigo-600 transition text-sm gap-2">
@@ -120,8 +135,9 @@
                             <span class="text-gray-700">Tidak ada file</span>
                         @endif
                     </div>
-                </div>
+                @else
+                    <div class="text-center text-white py-8">Data tidak ditemukan.</div>
+                @endif
             </div>
-        @endif
-    </div>
+        </div>
 </div>

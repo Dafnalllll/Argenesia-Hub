@@ -226,6 +226,7 @@
                         <th class="py-4 px-6 text-left">Tanggal Pengajuan</th>
                         <th class="py-4 px-6 text-left">Tanggal Mulai</th>
                         <th class="py-4 px-6 text-left">Tanggal Selesai</th>
+                        <th class="py-4 px-6 text-left">Keterangan</th>
                         <th class="py-4 px-6 text-left">Status</th>
                         <th class="py-4 px-6 rounded-tr-2xl text-center">File</th>
                     </tr>
@@ -239,6 +240,7 @@
                             <td class="py-3 px-6" x-text="cuti.created_at.substring(0, 10)"></td>
                             <td class="py-3 px-6" x-text="cuti.tanggal_mulai"></td>
                             <td class="py-3 px-6" x-text="cuti.tanggal_selesai"></td>
+                            <td class="py-3 px-6" x-text="cuti.keterangan"></td>
                             <td class="py-3 px-6">
                                 <div x-data="{ open: false }" class="relative">
                                     <!-- Trigger Button -->

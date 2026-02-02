@@ -24,6 +24,7 @@
             <h2 class="text-2xl font-extrabold bg-linear-to-r from-[#0074D9] to-[#F53003] bg-clip-text text-transparent drop-shadow tracking-wide uppercase mb-1">{{ $username ?? 'Username' }}</h2>
             <span class="text-[#F53003] text-sm mb-2 flex items-center gap-2 bg-white/70 px-3 py-1 rounded-lg shadow">
                 <img src="{{ asset('img/profil/id.webp') }}" alt="ID" class="w-5 h-5" />
+                ARG -
                 @if($status_karyawan === 'Aktif' && $kode_karyawan)
                     {{ $kode_karyawan }}
                 @else

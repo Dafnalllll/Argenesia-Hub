@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use Livewire\Component;
 use App\Models\PengajuanCuti;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Aktivitas as AktivitasModel; // Tambahkan di atas jika belum
 
 class Dashboard extends Component
 {
@@ -39,5 +40,36 @@ class Dashboard extends Component
             'jumlahCutiDisetujui' => $jumlahCutiDisetujui,
             'sisaCuti' => $sisaCuti,
         ]);
+    }
+
+    public $showDeleteModal = false;
+    public $deleteId = null;
+
+    public function confirmDelete($id)
+    {
+        $this->deleteId = $id;
+        $this->showDeleteModal = true;
+    }
+
+    public function deletePengajuan()
+    {
+        if ($this->deleteId) {
+            $pengajuan = PengajuanCuti::find($this->deleteId);
+            if ($pengajuan && $pengajuan->user_id == Auth::id()) {
+                $pengajuan->delete();
+
+                // Catat aktivitas hapus pengajuan cuti
+                AktivitasModel::create([
+                    'user_id' => Auth::id(),
+                    'tanggal' => now(),
+                    'aktivitas' => 'Hapus Pengajuan Cuti',
+                    'keterangan' => 'Menghapus pengajuan cuti tipe: ' . ($pengajuan->tipeCuti->nama_cuti ?? '-'),
+                ]);
+
+                session()->flash('success', 'Pengajuan cuti berhasil dihapus!');
+            }
+        }
+        $this->showDeleteModal = false;
+        $this->deleteId = null;
     }
 }
