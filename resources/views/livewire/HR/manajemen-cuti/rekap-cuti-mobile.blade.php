@@ -297,7 +297,7 @@
                 </div>
 
         <div class="overflow-x-auto w-75">
-            <table class="min-w-150 w-full text-sm text-gray-700 rounded-2xl shadow-lg border-separate border-spacing-0">
+            <table class="min-w-275 w-full text-sm text-gray-700 rounded-2xl shadow-lg border-separate border-spacing-0">
                 <thead>
                     <tr class="bg-linear-to-r from-[#F53003] to-[#0074D9] text-white sticky top-0 z-10">
                         <th class="py-4 px-6 rounded-tl-2xl text-left">No</th>

@@ -59,7 +59,7 @@
                         <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5 relative" />
                         <a href="/admin/manajemen-cuti" class="flex items-center flex-1 focus:outline-none relative">
                             @if($jumlahCutiMenunggu > 0)
-                                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
+                                <span class="absolute -top-2 -left-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
                                     {{ $jumlahCutiMenunggu }}
                                 </span>
                             @endif
@@ -125,7 +125,7 @@
                         <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5 relative" />
                         <a href="/hr/manajemen-cuti" class="flex items-center flex-1 focus:outline-none relative">
                             @if($jumlahCutiMenunggu > 0)
-                                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
+                                <span class="absolute -top-2 -left-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
                                     {{ $jumlahCutiMenunggu }}
                                 </span>
                             @endif
@@ -319,13 +319,12 @@
                         <div class="flex items-center px-3 py-2 rounded-lg transition relative text-white hover:bg-white hover:text-[#0074D9]">
                             <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5 relative" />
                             <a href="/admin/manajemen-cuti" class="flex items-center flex-1 focus:outline-none relative">
-                                <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5" />
                                 @if($jumlahCutiMenunggu > 0)
-                                    <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
+                                    <span class="absolute -top-2 -left-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
                                         {{ $jumlahCutiMenunggu }}
                                     </span>
                                 @endif
-                                <span class="ml-4">Manajemen Cuti</span>
+                                <span class="ml-4 whitespace-nowrap">Manajemen Cuti</span>
                             </a>
                             <button type="button"
                                 @click="openCutiMobileAdmin = !openCutiMobileAdmin"
@@ -379,15 +378,9 @@
                     <li x-data="{ openCutiMobileAdmin: false }">
                         <div class="flex items-center px-3 py-2 rounded-lg transition relative text-white hover:bg-white hover:text-[#0074D9]">
                             <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5 relative" />
-                            @if($jumlahCutiMenunggu > 0)
-                                <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
-                                    {{ $jumlahCutiMenunggu }}
-                                </span>
-                            @endif
                             <a href="/hr/manajemen-cuti" class="flex items-center flex-1 focus:outline-none relative">
-                                <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Manajemen Cuti" class="w-5 h-5" />
                                 @if($jumlahCutiMenunggu > 0)
-                                    <span class="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
+                                    <span class="absolute -top-2 -left-2 inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-xs font-bold bg-red-500 text-white animate-bounce z-10">
                                         {{ $jumlahCutiMenunggu }}
                                     </span>
                                 @endif
@@ -401,7 +394,7 @@
                         </div>
                         <ul x-show="openCutiMobileAdmin" x-transition class="ml-8 mt-1 space-y-1">
                             <li>
-                                <a href="/hr/manajemen-cuti/atur-tipe-cuti"
+                                <a href="/hr/manajemen-cuti/pengajuan-cuti"
                                     class="block px-3 py-2 rounded-lg transition text-white hover:bg-white hover:text-[#F53003]">
                                     <img src="{{ asset('img/cuti/kategori.webp') }}" alt="Kategori" class="w-5 h-5 inline mr-2" />
                                     Atur Tipe Cuti

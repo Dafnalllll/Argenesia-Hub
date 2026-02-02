@@ -15,14 +15,31 @@
             </div>
         @endif
         <!-- Form tambah tipe cuti -->
-        <form wire:submit.prevent="simpan" class="space-y-8">
+        <form
+            x-data="{
+                nama_cuti: @entangle('nama_cuti'),
+                maksimal_hari: @entangle('maksimal_hari'),
+            }"
+            @submit.prevent="
+                if (!nama_cuti) {
+                    Swal.fire({icon:'warning', title:'Nama tipe cuti wajib diisi!', confirmButtonColor:'#F53003'});
+                    return false;
+                }
+                if (!maksimal_hari) {
+                    Swal.fire({icon:'warning', title:'Jumlah hari wajib diisi!', confirmButtonColor:'#F53003'});
+                    return false;
+                }
+                $wire.simpan();
+            "
+            class="space-y-8"
+        >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="relative group mb-6">
                     <label class="flex items-center gap-2 font-bold text-lg text-[#0074D9] mb-2">
                         <img src="{{ asset('img/cuti/kategori.webp') }}" alt="Kategori" class="w-6 h-6" />
                         Nama Tipe Cuti
                     </label>
-                    <input type="text" wire:model="nama_cuti" required
+                    <input type="text" wire:model="nama_cuti" x-model="nama_cuti"
                         class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9]/30 bg-white/90 text-gray-700 font-semibold
                         transition-all duration-300
                         focus:border-[#F53003] outline-none focus:scale-105 focus:shadow-xl
@@ -36,7 +53,7 @@
                         Jumlah Hari
                     </label>
                     <div class="flex items-center gap-2">
-                        <input type="number" wire:model="maksimal_hari" required min="1"
+                        <input type="number" wire:model="maksimal_hari" x-model="maksimal_hari" min="1"
                             class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9] focus:border-[#F53003] bg-white/90 text-gray-700 font-semibold text-lg text-center transition-all duration-300 outline-none  focus:scale-105 focus:shadow-xl
                         hover:border-[#F53003] hover:shadow-md"
                             placeholder="Contoh: 12">
@@ -65,3 +82,14 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if ($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Data belum lengkap!',
+        html: `{!! implode('<br>', $errors->all()) !!}`,
+        confirmButtonColor: '#F53003'
+    });
+</script>
+@endif

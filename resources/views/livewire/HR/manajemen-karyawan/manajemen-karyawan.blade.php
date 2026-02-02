@@ -152,26 +152,44 @@
 
 
         <!-- Pagination Desktop -->
-        <div class="justify-between items-center mt-4 hidden md:flex" x-show="totalPages > 1">
-            <button
-                @click="goToPage(currentPage-1)"
-                :disabled="currentPage === 1"
-                class="px-3 py-1 rounded bg-gray-200 text-gray-700 font-semibold mr-2 disabled:opacity-50"
-            >&laquo; Prev</button>
-            <template x-for="page in totalPages" :key="page">
-                <button
-                    @click="goToPage(page)"
-                    :class="page === currentPage ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700'"
-                    class="mx-1 px-3 py-1 rounded font-semibold"
-                    x-text="page"
-                ></button>
-            </template>
-            <button
-                @click="goToPage(currentPage+1)"
-                :disabled="currentPage === totalPages"
-                class="px-3 py-1 rounded bg-gray-200 text-gray-700 font-semibold ml-2 disabled:opacity-50"
-            >Next &raquo;</button>
-        </div>
+        <div class="mt-4">
+                <template x-if="totalPages > 1">
+                    <div class="flex justify-between items-center">
+                        <!-- Jumlah Data -->
+                        <div class="text-sm text-gray-700">
+                            Menampilkan <span x-text="(currentPage - 1) * perPage + 1"></span> - <span x-text="Math.min(currentPage * perPage, filteredUsers.length)"></span> dari <span x-text="filteredUsers.length"></span> data
+                        </div>
+                        <!-- Navigasi Halaman -->
+                        <div class="flex gap-2">
+                            <button
+                                @click="goToPage(currentPage - 1)"
+                                :disabled="currentPage === 1"
+                                class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                Sebelumnya
+                            </button>
+                            <template x-for="page in totalPages" :key="page">
+                                <button
+                                    @click="goToPage(page)"
+                                    x-text="page"
+                                    :class="{
+                                        'bg-blue-600 text-white font-semibold': currentPage === page,
+                                        'bg-gray-200 text-gray-700 hover:bg-blue-100': currentPage !== page
+                                    }"
+                                    class="px-4 py-2 rounded-lg transition-all duration-300 cursor-pointer"
+                                ></button>
+                            </template>
+                            <button
+                                @click="goToPage(currentPage + 1)"
+                                :disabled="currentPage === totalPages"
+                                class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            >
+                                Selanjutnya
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
 
         <!-- Pagination Mobile -->
         <div class="flex justify-center items-center mt-4 md:hidden" x-show="totalPages > 1">

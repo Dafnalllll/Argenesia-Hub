@@ -96,12 +96,13 @@ class Pengajuan extends Component
 
         PengajuanCuti::create([
             'user_id' => Auth::id(),
+            'karyawan_id' => $karyawan->id, // <-- tambahkan ini!
             'tipe_cuti_id' => $this->tipe_cuti_id,
             'tanggal_mulai' => $this->tanggal_mulai,
             'tanggal_selesai' => $this->tanggal_selesai,
             'keterangan' => $this->keterangan,
             'status' => 'Menunggu',
-            'file_pengajuan' => $filePath, // simpan path file di sini
+            'file_pengajuan' => $filePath,
         ]);
 
         // Tambahkan aktivitas
@@ -113,7 +114,7 @@ class Pengajuan extends Component
         ]);
 
         $this->reset(['tipe_cuti_id', 'tanggal_mulai', 'tanggal_selesai', 'keterangan', 'file_upload']);
-        session()->flash('success', 'Pengajuan cuti berhasil disimpan!');
+        session()->flash('success', 'Pengajuan cuti berhasil diajukan!');
     }
 
     public function resetForm()

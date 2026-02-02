@@ -10,18 +10,34 @@ class Dashboard extends Component
 {
     public function render()
     {
-        $totalPengajuan = PengajuanCuti::where('user_id', Auth::id())->count();
+        $user = Auth::user();
+        $karyawan = $user->karyawan;
 
-        // Ambil 5 pengajuan cuti terbaru user
-        $pengajuanTerbaru = PengajuanCuti::where('user_id', Auth::id())
+        $totalPengajuan = PengajuanCuti::where('user_id', $user->id)->count();
+
+        $pengajuanTerbaru = PengajuanCuti::where('user_id', $user->id)
             ->orderByDesc('created_at')
-            ->with('tipeCuti') // pastikan relasi tipeCuti ada di model
+            ->with('tipeCuti')
             ->limit(5)
             ->get();
+
+        $jumlahCutiDisetujui = PengajuanCuti::where('user_id', $user->id)
+            ->where('status', 'Disetujui')
+            ->count();
+
+        // Saldo cuti hanya berlaku jika status_karyawan 'Aktif'
+        $saldoCuti = ($karyawan && $karyawan->status_karyawan === 'Aktif') ? $karyawan->saldo_cuti : 0;
+
+        // Sisa cuti juga hanya berlaku jika aktif
+        $sisaCuti = ($karyawan && $karyawan->status_karyawan === 'Aktif')
+            ? ($saldoCuti - $jumlahCutiDisetujui)
+            : 0;
 
         return view('livewire.karyawan.dashboard.dashboard', [
             'totalPengajuan' => $totalPengajuan,
             'pengajuanTerbaru' => $pengajuanTerbaru,
+            'jumlahCutiDisetujui' => $jumlahCutiDisetujui,
+            'sisaCuti' => $sisaCuti,
         ]);
     }
 }

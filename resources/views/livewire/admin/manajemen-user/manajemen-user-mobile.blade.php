@@ -284,20 +284,34 @@
                                         <ul>
                                             <li>
                                                 <button
-                                                    @click="$wire.changeStatus(user.id, 'Aktif'); open = false"
-                                                    class="flex items-center gap-2 w-full px-3 py-1.5 text-left text-xs font-bold cursor-pointer
-                                                        hover:bg-green-50 text-green-700 transition-all"
-                                                >
+                                                    @click="
+                                                            $wire.changeStatus(user.id, 'Aktif').then(res => {
+                                                                if(res?.status) {
+                                                                    user.status = res.status;
+                                                                    if(detail[user.id]) detail[user.id].status = res.status;
+                                                                }
+                                                            });
+                                                            open = false
+                                                        "
+                                                        class="flex items-center gap-2 w-full px-3 py-1.5 text-left text-xs font-bold cursor-pointer hover:bg-green-50 text-green-700 transition-all"
+                                                    >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" class="text-green-400" fill="currentColor"/><path d="M9 12l2 2l4 -4" stroke="white" stroke-width="2" fill="none"/></svg>
                                                     Aktif
                                                 </button>
                                             </li>
                                             <li>
                                                 <button
-                                                    @click="$wire.changeStatus(user.id, 'Nonaktif'); open = false"
-                                                    class="flex items-center gap-2 w-full px-3 py-1.5 text-left text-xs font-bold cursor-pointer
-                                                        hover:bg-red-50 text-red-700 transition-all"
-                                                >
+                                                    @click="
+                                                    $wire.changeStatus(user.id, 'Nonaktif').then(res => {
+                                                        if(res?.status) {
+                                                            user.status = res.status;
+                                                            if(detail[user.id]) detail[user.id].status = res.status;
+                                                        }
+                                                    });
+                                                    open = false
+                                                "
+                                                class="flex items-center gap-2 w-full px-3 py-1.5 text-left text-xs font-bold cursor-pointer hover:bg-red-50 text-red-700 transition-all"
+                                            >
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" class="text-red-400" fill="currentColor"/><path d="M9 9l6 6M15 9l-6 6" stroke="white" stroke-width="2" fill="none"/></svg>
                                                     Nonaktif
                                                 </button>

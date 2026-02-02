@@ -5,8 +5,7 @@ namespace App\Livewire\Dashboard\Cuti;
 use Livewire\Component;
 use App\Models\PengajuanCuti;
 use App\Models\TipeCuti;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class Riwayat extends Component
 {
@@ -23,13 +22,14 @@ class Riwayat extends Component
     {
         $tipe_cutis = TipeCuti::pluck('nama_cuti')->toArray();
 
-        $query = PengajuanCuti::query(); // Ganti dari Cuti::query()
+        // Filter hanya data milik user yang sedang login
+        $query = PengajuanCuti::where('user_id', Auth::id());
 
         if ($this->filterStatus) {
             $query->where('status', $this->filterStatus);
         }
         if ($this->filterKategori) {
-            $query->whereHas('tipeCuti', function($q) {
+            $query->whereHas('tipeCuti', function ($q) {
                 $q->where('nama_cuti', $this->filterKategori);
             });
         }

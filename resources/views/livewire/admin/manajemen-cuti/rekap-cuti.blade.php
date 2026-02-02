@@ -123,7 +123,7 @@
                             </span>
                             <span
                                 :class="open ? 'rotate-180' : ''"
-                                class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                                class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"/>
@@ -180,7 +180,7 @@
                             </span>
                             <span
                                 :class="open ? 'rotate-180' : ''"
-                                class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                                class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"/>
@@ -242,7 +242,7 @@
                             </span>
                             <span
                                 :class="open ? 'rotate-180' : ''"
-                                class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                                class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"/>
@@ -289,7 +289,7 @@
                             </span>
                             <span
                                 :class="open ? 'rotate-180' : ''"
-                                class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                                class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"/>

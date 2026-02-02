@@ -103,7 +103,7 @@
                     </span>
                     <span
                         :class="open ? 'rotate-180' : ''"
-                        class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                        class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                     >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path d="M19 9l-7 7-7-7"/>
@@ -160,7 +160,7 @@
                         </span>
                         <span
                             :class="open ? 'rotate-180' : ''"
-                            class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                            class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M19 9l-7 7-7-7"/>
@@ -209,7 +209,7 @@
                         </span>
                         <span
                             :class="open ? 'rotate-180' : ''"
-                            class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                            class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M19 9l-7 7-7-7"/>
@@ -256,7 +256,7 @@
                         </span>
                         <span
                             :class="open ? 'rotate-180' : ''"
-                            class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                            class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path d="M19 9l-7 7-7-7"/>
@@ -350,6 +350,57 @@
                 </tbody>
             </table>
         </div>
+        <!-- Export Dropdown di Bawah Tabel -->
+            <div class="flex justify-end mt-6">
+                <div x-data="{ open: false }" class="relative">
+                    <button
+                        @click="if(filteredCutis.length > 0) open = !open"
+                        @click.away="open = false"
+                        :class="[
+                        'px-5 py-2 rounded-lg bg-linear-to-r from-[#F53003] to-[#0074D9] text-white font-semibold shadow transition-all flex items-center gap-2 hover:scale-105',
+                        filteredCutis.length === 0 ? 'cursor-not-allowed opacity-70' : 'cursor-pointer hover:bg-blue-700'
+                    ]"
+                >
+                        <img src="{{ asset('img/export/export.webp') }}" alt="Export" class="w-5 h-5"> Export
+                        <svg
+                            :class="open ? 'rotate-180 transition-transform duration-300' : 'transition-transform duration-300'"
+                            class="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div
+                        x-show="open"
+                        x-transition
+                        class="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                    >
+                        <ul>
+                            <li>
+                                <button
+                                    wire:click="exportExcel"
+                                    @click="open = false"
+                                    class="w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-green-50 text-green-700 font-semibold rounded-t-lg transition cursor-pointer"
+                                >
+                                    <img src="{{ asset('img/export/excel.webp') }}" alt="Excel" class="w-5 h-5"> Excel
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    wire:click="exportPdf"
+                                    @click="open = false"
+                                    class="w-full flex items-center gap-2 text-left px-4 py-2 hover:bg-red-50 text-red-700 font-semibold rounded-b-lg transition cursor-pointer"
+                                >
+                                    <img src="{{ asset('img/export/pdf.webp') }}" alt="PDF" class="w-5 h-5"> PDF
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
     </div>
 
 

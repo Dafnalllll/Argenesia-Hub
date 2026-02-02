@@ -63,6 +63,7 @@ class Profil extends Component
     {
         $this->validate([
             'foto_baru' => 'nullable|image|mimes:jpg,jpeg,png,webp,svg|max:5120',
+            'nomor_telepon' => 'nullable|regex:/^[0-9]+$/',
         ]);
 
         $user = Auth::user();

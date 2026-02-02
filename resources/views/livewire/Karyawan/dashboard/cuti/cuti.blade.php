@@ -37,8 +37,8 @@
     <!-- Overview Pengajuan Cuti -->
     <div class="w-full max-w-xs mx-auto bg-white/40 backdrop-blur-md rounded-2xl shadow-lg p-4 mb-8 md:max-w-none md:p-8">
         <div class="flex items-center justify-center md:justify-between mb-4">
-            <h2 class="text-xl font-bold text-[#0074D9] text-center md:text-left w-full">
-                Pengajuan Cuti Terakhir
+            <h2 class="text-xl font-bold text-black text-center md:text-left w-full">
+                Pengajuan Cuti Terbaru
             </h2>
         </div>
         @if($pengajuanTerakhir)
@@ -54,7 +54,7 @@
                 <div>
                     <span class="block text-gray-700 font-semibold">Status</span>
                     <span class="block
-                        @if($pengajuanTerakhir->status == 'Diterima') text-green-600
+                        @if($pengajuanTerakhir->status == 'Disetujui') text-green-600
                         @elseif($pengajuanTerakhir->status == 'Ditolak') text-red-600
                         @else text-yellow-600 @endif
                         font-semibold">
@@ -73,7 +73,7 @@
     <!-- Overview Riwayat Pengajuan -->
     <div class="w-full max-w-xs mx-auto bg-white/40 backdrop-blur-md rounded-2xl shadow-lg p-4 mb-8 md:max-w-none md:p-8">
         <div class="flex items-center justify-center md:justify-between mb-4">
-            <h2 class="text-xl font-bold text-[#F53003] text-center md:text-left w-full">Pengajuan Cuti Terakhir</h2>
+            <h2 class="text-xl font-bold text-black text-center md:text-left w-full">Pengajuan Cuti Terakhir</h2>
         </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden mt-2">
@@ -93,7 +93,7 @@
                             <td class="py-2 px-3">{{ $item->tipeCuti->nama_cuti ?? '-' }}</td>
                             <td class="py-2 px-3">
                                 <span class="px-3 py-1 rounded-full font-semibold border
-                                    @if($item->status == 'Diterima') border-green-500 text-green-700 bg-green-50
+                                    @if($item->status == 'Disetujui') border-green-500 text-green-700 bg-green-50
                                     @elseif($item->status == 'Ditolak') border-red-500 text-red-700 bg-red-50
                                     @else border-yellow-500 text-yellow-700 bg-yellow-50 @endif">
                                     {{ $item->status }}

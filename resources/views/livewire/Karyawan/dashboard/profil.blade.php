@@ -24,7 +24,6 @@
             <h2 class="text-2xl font-extrabold bg-linear-to-r from-[#0074D9] to-[#F53003] bg-clip-text text-transparent drop-shadow tracking-wide uppercase mb-1">{{ $username ?? 'Username' }}</h2>
             <span class="text-[#F53003] text-sm mb-2 flex items-center gap-2 bg-white/70 px-3 py-1 rounded-lg shadow">
                 <img src="{{ asset('img/profil/id.webp') }}" alt="ID" class="w-5 h-5" />
-                ARG -
                 @if($status_karyawan === 'Aktif' && $kode_karyawan)
                     {{ $kode_karyawan }}
                 @else
@@ -66,9 +65,10 @@
                     <img src="{{ asset('img/profil/phone.webp') }}" alt="Phone" class="w-5 h-5" /> Nomor Telepon
                 </label>
                 <input type="text" wire:model="nomor_telepon"
-                    class="w-full px-4 py-2 rounded-lg border border-[#0074D9]/30 bg-white/60 focus:outline-none {{ !$editMode ? 'cursor-not-allowed' : '' }}"
-                    {{ !$editMode ? 'disabled' : '' }}>
-            </div>
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                        class="w-full px-4 py-2 rounded-lg border border-[#0074D9]/30 bg-white/60 focus:outline-none {{ !$editMode ? 'cursor-not-allowed' : '' }}"
+                        {{ !$editMode ? 'disabled' : '' }}>
+                                </div>
             <div class="bg-white/80 rounded-2xl shadow-lg p-5 flex flex-col gap-3 border border-[#F53003]/10 md:col-span-2">
                 <label class="flex items-center gap-2 text-sm font-semibold text-[#F53003]">
                     <img src="{{ asset('img/profil/address.webp') }}" alt="Alamat" class="w-5 h-5" /> Alamat

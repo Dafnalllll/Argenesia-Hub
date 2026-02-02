@@ -1,5 +1,5 @@
 <div wire:poll.5s class="bg-white/40 backdrop-blur-md rounded-2xl shadow-lg p-6 overflow-x-auto mb-8">
-    <h3 class="text-lg font-bold mb-1 text-[#F53003]">Riwayat Aktivitas Terbaru</h3>
+    <h3 class="text-lg font-bold mb-4 text-black text-center md:text-left">Riwayat Aktivitas Terbaru</h3>
     <table class="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
         <thead class="bg-[#F53003]">
             <tr class="text-left text-gray-700">

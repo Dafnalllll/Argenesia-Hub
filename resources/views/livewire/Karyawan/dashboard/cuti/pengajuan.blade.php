@@ -1,3 +1,4 @@
+{{-- filepath: resources/views/livewire/Karyawan/dashboard/cuti/pengajuan.blade.php --}}
 @section('title', 'Pengajuan Cuti || Argenesia Hub')
 
 <div class="relative w-full max-w-sm md:max-w-5xl mx-auto bg-white/60 backdrop-blur-2xl rounded-3xl shadow-2xl
@@ -15,7 +16,7 @@
         <div class="bg-white border border-red-400 rounded-xl shadow-xl px-8 py-6 text-center">
             <div class="text-red-600 text-2xl font-bold mb-2">Pengajuan Gagal</div>
             <div class="text-gray-700 mb-2">Status karyawan Anda masih <b>Nonaktif</b>.<br>Silakan hubungi admin untuk aktivasi.</div>
-            <button @click="show = false" class="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600">Tutup</button>
+            <button @click="show = false" class="mt-3 px-4 py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 hover:scale-105 cursor-pointer transition-all">Tutup</button>
         </div>
     </div>
     <!-- Decorative Gradient Blobs -->
@@ -28,18 +29,37 @@
                 Pengajuan Cuti
             </h2>
         </div>
+
+        {{-- Tampilkan error validasi backend --}}
+        @if ($errors->any())
+            <div class="mb-4 px-4 py-3 rounded bg-red-100 text-red-800 font-semibold">
+                <ul class="list-disc pl-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (session()->has('error'))
+            <div class="mb-4 px-4 py-3 rounded bg-red-100 text-red-800 font-semibold">
+                {{ session('error') }}
+            </div>
+        @endif
         @if (session()->has('success'))
             <div class="mb-4 px-4 py-3 rounded bg-green-100 text-green-800 font-semibold">
                 {{ session('success') }}
             </div>
         @endif
+
         <form
             x-data="{
                 tipeCutis: {{ Js::from($tipeCutis->map(fn($t) => ['id' => $t->id, 'nama' => $t->nama_cuti, 'maksimal_hari' => $t->maksimal_hari])) }},
-                tipe_cuti_id: null,
-                tanggal_mulai: '',
-                tanggal_selesai: '',
+                tipe_cuti_id: @entangle('tipe_cuti_id'),
+                tanggal_mulai: @entangle('tanggal_mulai'),
+                tanggal_selesai: @entangle('tanggal_selesai'),
+                keterangan: @entangle('keterangan'),
                 fileName: '',
+                open: false,
                 hitungTanggalSelesai() {
                     let tipe = this.tipeCutis.find(t => t.id == this.tipe_cuti_id);
                     if (tipe && this.tanggal_mulai) {
@@ -62,13 +82,33 @@
                 tanggal_mulai = '';
                 tanggal_selesai = '';
                 fileName = '';
+                keterangan = '';
                 if ($refs.fileInput) $refs.fileInput.value = '';
             "
+            @submit.prevent="
+                if (!tipe_cuti_id) {
+                    Swal.fire({icon:'warning', title:'Tipe Cuti wajib dipilih!', confirmButtonColor:'#0074D9'});
+                    return false;
+                }
+                if (!tanggal_mulai) {
+                    Swal.fire({icon:'warning', title:'Tanggal Mulai wajib diisi!', confirmButtonColor:'#0074D9'});
+                    return false;
+                }
+                if (!keterangan) {
+                    Swal.fire({icon:'warning', title:'Keterangan wajib diisi!', confirmButtonColor:'#0074D9'});
+                    return false;
+                }
+                if (!$refs.fileInput.value) {
+                    Swal.fire({icon:'warning', title:'File wajib diupload!', confirmButtonColor:'#0074D9'});
+                    return false;
+                }
+                $wire.simpan();
+            "
             class="space-y-6 md:space-y-8"
-            wire:submit.prevent="simpan"
+            novalidate
         >
             <!-- Tipe Cuti -->
-            <div class="relative w-full" x-data="{ open: false }">
+            <div class="relative w-full">
                 <label class="flex items-center gap-2 font-bold text-lg text-[#0074D9] mb-2">
                     <img src="{{ asset('img/cuti/kategori.webp') }}" alt="Kategori" class="w-6 h-6" />
                     Tipe Cuti
@@ -109,7 +149,7 @@
                             class="w-5 h-5 inline-block mr-1 -mt-1 opacity-70 group-focus-within:opacity-100 group-focus-within:scale-110 transition-all duration-300" />
                         Tanggal Mulai
                     </label>
-                    <input type="date" x-model="tanggal_mulai" @change="hitungTanggalSelesai()" required
+                    <input type="date" x-model="tanggal_mulai" @change="hitungTanggalSelesai()"
                         class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9]/30 bg-white/90 text-gray-700 font-semibold cursor-pointer
                         transition-all duration-300
                         focus:border-[#F53003] focus:scale-105 focus:shadow-xl
@@ -142,7 +182,7 @@
                         class="w-5 h-5 inline-block mr-1 -mt-1 opacity-70 group-focus-within:opacity-100 group-focus-within:rotate-12 group-focus-within:scale-110 transition-all duration-300" />
                     Keterangan
                 </label>
-                <textarea wire:model="keterangan" name="keterangan" rows="3" required
+                <textarea x-model="keterangan" wire:model="keterangan" name="keterangan" rows="3"
                     class="w-full px-4 py-3 rounded-xl border-2 border-[#0074D9]/30 bg-white/90 text-gray-700 font-semibold resize-none
                     transition-all duration-300
                     focus:border-[#F53003] focus:scale-105 focus:shadow-xl
@@ -150,14 +190,7 @@
                     placeholder=" "></textarea>
             </div>
             <!-- Upload File PDF -->
-            <div class="relative group mb-6" x-data="{
-                fileName: '',
-                clearFile() {
-                    this.$refs.fileInput.value = '';
-                    this.fileName = '';
-                    $wire.set('file_upload', null);
-                }
-            }">
+            <div class="relative group mb-6">
                 <label class="flex items-center gap-2 font-bold text-base mb-2
                     {{ $errors->has('file_upload') ? 'text-[#F53003]' : 'text-[#0074D9]' }}">
                     <img src="{{ asset('img/export/pdf.webp') }}"
@@ -165,18 +198,14 @@
                         class="w-5 h-5 inline-block mr-1 -mt-1 opacity-70" />
                     Upload File (PDF, maks 5 MB)
                 </label>
-                <!-- Custom file input -->
                 <div class="relative flex items-center ">
-                    <!-- Hidden real input -->
                     <input type="file"
                         x-ref="fileInput"
                         wire:model="file_upload"
                         accept="application/pdf"
-                        required
                         class="hidden"
                         @change="fileName = $refs.fileInput.files.length ? $refs.fileInput.files[0].name : ''"
                     >
-                    <!-- Custom input UI -->
                     <button type="button"
                         @click="$refs.fileInput.click()"
                         class="w-full px-4 py-3 rounded-xl border-2 bg-white/90 text-gray-700 font-semibold pr-12 text-left cursor-pointer
@@ -184,10 +213,9 @@
                             focus:border-[#F53003] focus:scale-105 focus:shadow-xl
                             hover:border-[#F53003] hover:shadow-md
                             {{ $errors->has('file_upload') ? 'border-[#F53003]' : 'border-[#0074D9]/30' }}">
-                        <span x-show="fileName" x-text="fileName" class="break-words whitespace-normal block"></span>
+                        <span x-show="fileName" x-text="fileName" class="wrap-break-words whitespace-normal block"></span>
                         <span x-show="!fileName" class="text-gray-400">Belum ada file dipilih</span>
                     </button>
-                    <!-- Ikon cancel -->
                     <button type="button"
                         x-show="fileName"
                         @click="clearFile()"
@@ -197,7 +225,6 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
                     </button>
-                    <!-- Ikon upload -->
                     <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center">
                         <svg class="w-6 h-6 text-[#0074D9] opacity-70" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 4v12"/>
@@ -237,3 +264,26 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{-- Tampilkan error backend dengan SweetAlert2 --}}
+@if ($errors->any())
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        html: `{!! implode('<br>', $errors->all()) !!}`,
+        confirmButtonColor: '#F53003'
+    });
+</script>
+@endif
+@if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+        confirmButtonColor: '#F53003'
+    });
+</script>
+@endif

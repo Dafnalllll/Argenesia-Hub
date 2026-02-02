@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\AktivitasAdmin;
+use App\Models\PengajuanCuti;
 
 class ManajemenUser extends Component
 {
@@ -23,7 +24,7 @@ class ManajemenUser extends Component
     public function getUsersProperty()
     {
         return User::query()
-            ->with(['role', 'karyawan']) 
+            ->with(['role', 'karyawan'])
             ->when($this->search, function ($query) {
                 $query->where('name', 'like', "%{$this->search}%");
             })
@@ -72,7 +73,7 @@ class ManajemenUser extends Component
                         $user->karyawan->tanggal_masuk = now();
                     }
                     if (!$user->karyawan->kode_karyawan || $user->karyawan->kode_karyawan === $user->id) {
-                        $user->karyawan->kode_karyawan = 'ARG-' . str_pad($user->id, 4, '0', STR_PAD_LEFT);
+                        $user->karyawan->kode_karyawan = str_pad($user->id, 4, '0', STR_PAD_LEFT);
                     }
                 } else {
                     $user->karyawan->status_karyawan = 'Nonaktif';
@@ -88,6 +89,7 @@ class ManajemenUser extends Component
             ]);
 
             session()->flash('success', 'Status User Berhasil Diubah.');
+            return ['status' => $user->status];
         } else if ($type === 'karyawan') {
             $karyawan = \App\Models\Karyawan::find($id);
 
@@ -98,6 +100,15 @@ class ManajemenUser extends Component
                 }
                 $karyawan->status_karyawan = $status;
                 $karyawan->save();
+            }
+        } else if ($type === 'cuti') {
+            $cuti = PengajuanCuti::findOrFail($id);
+
+            if ($cuti) {
+                $cuti->status = $status;
+                $cuti->save();
+                session()->flash('success', 'Status cuti berhasil diubah menjadi ' . $status);
+                return ['status' => $cuti->status];
             }
         }
     }

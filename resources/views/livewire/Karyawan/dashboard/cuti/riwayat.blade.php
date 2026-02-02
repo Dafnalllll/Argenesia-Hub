@@ -26,7 +26,7 @@
                             @click="open = !open"
                             @click.away="open = false"
                             type="button"
-                            class="appearance-none pl-10 pr-6 py-2 rounded-lg border border-gray-300 bg-transparent font-semibold text-base text-gray-700 shadow w-full flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-lg relative z-20 cursor-pointer"
+                            class="appearance-none pl-10 pr-4 py-1.5 rounded-lg border border-gray-300 bg-transparent font-semibold text-base text-gray-700 shadow w-full flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-300 hover:scale-105 hover:border-blue-400 hover:shadow-lg relative z-20 cursor-pointer"
                         >
                             <span>
                                 @if($filterKategori)
@@ -37,7 +37,7 @@
                             </span>
                             <span
                                 :class="open ? 'rotate-180' : ''"
-                                class="pointer-events-none absolute right-3 top-3 text-gray-400 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
+                                class="pointer-events-none absolute right-3 top-3 text-gray-700 transition-transform duration-300 group-hover:scale-125 group-focus-within:scale-125 group-hover:text-blue-500 group-focus-within:text-blue-500 z-20"
                             >
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"/>
@@ -45,7 +45,7 @@
                             </span>
                         </button>
                         <div x-show="open" x-transition class="absolute z-30 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200">
-                            <ul>
+                            <ul class="max-h-30 overflow-y-auto">
                                 <li>
                                     <button wire:click="$set('filterKategori', '')" @click="open = false"
                                         class="cursor-pointer flex items-center w-full px-4 py-2 hover:bg-blue-50 rounded-lg transition text-gray-700 font-semibold">
@@ -97,14 +97,14 @@
                                 </span>
                                 <span
                                     :class="open ? 'rotate-180' : ''"
-                                    class="pointer-events-none absolute right-2 top-3 text-gray-400 transition-transform duration-300 z-20"
+                                    class="pointer-events-none absolute right-2 top-3 text-gray-700 transition-transform duration-300 z-20"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path d="M19 9l-7 7-7-7"/>
                                     </svg>
                                 </span>
                             </button>
-                            <div x-show="open" x-transition class="absolute z-30 mt-2 w-full bg-white rounded-md shadow-lg border border-gray-200 text-sm">
+                            <div x-show="open" x-transition class="absolute z-30  w-full bg-white rounded-md shadow-lg border border-gray-200 text-sm">
                                 <ul>
                                     <li>
                                         <button wire:click="$set('filterStatus', '')" @click="open = false"
@@ -148,7 +148,7 @@
                 </div>
             </div>
             <div class="overflow-x-auto rounded-2xl shadow">
-                <table class="min-w-full text-sm text-left">
+                <table class="min-w-full text-sm bg-white/30 text-left">
                     <thead class="bg-linear-to-r from-[#0074D9]/80 to-[#F53003]/80 text-white uppercase">
                         <tr>
                             <th class="px-4 py-3">No</th>
@@ -163,7 +163,7 @@
                     </thead>
                     <tbody>
                         @forelse($riwayatCuti as $i => $cuti)
-                        <tr class="odd:bg-white even:bg-[#f8fafc] hover:bg-[#e0f7fa]/60 transition">
+                        <tr class="bg-white/30 hover:bg-[#e0f7fa]/60 transition">
                             <td class="px-4 py-3">{{ $i + 1 }}</td>
                             <td class="px-4 py-3">{{ $cuti->created_at->format('d M Y') }}</td>
                             <td class="px-4 py-3 capitalize">
@@ -172,9 +172,9 @@
                             <td class="px-4 py-3">{{ $cuti->tanggal_mulai }}</td>
                             <td class="px-4 py-3">{{ $cuti->tanggal_selesai }}</td>
                             <td class="px-4 py-3">
-                                @if($cuti->status == 'disetujui')
+                                @if(strtolower($cuti->status) == 'disetujui')
                                     <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 font-bold">Disetujui</span>
-                                @elseif($cuti->status == 'ditolak')
+                                @elseif(strtolower($cuti->status) == 'ditolak')
                                     <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 font-bold">Ditolak</span>
                                 @else
                                     <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 font-bold">Menunggu</span>

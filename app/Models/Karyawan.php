@@ -17,6 +17,7 @@ class Karyawan extends Model
         'tanggal_masuk',
         'foto',
         'alamat',
+        'saldo_cuti',
     ];
 
     public function user()

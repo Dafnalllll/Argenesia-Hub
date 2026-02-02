@@ -1,7 +1,8 @@
-
-
 <div class="block md:hidden -ml-1 py-4 md:p-8 ">
-    <h1 class="text-2xl font-bold text-white mb-4 text-center">Dashboard HR</h1>
+    <h1 class="text-xl font-bold mb-6 text-white flex items-center justify-center gap-3 mt-10">
+        <img src="{{ asset('img/role/hr.webp') }}" alt="HR" class="w-7 h-7" />
+        Dashboard HR
+    </h1>
     <div class="space-y-4">
         {{-- Card Statistik (Stacked) --}}
         <div class="space-y-3">
@@ -33,10 +34,8 @@
         </div>
         {{-- Tabel Ringkasan (Scroll) --}}
         <div class="bg-white/40 backdrop-blur-md border border-white/30 rounded-xl shadow-lg p-2">
-            <div class="flex justify-between items-center mb-2">
-                <h2 class="text-lg font-bold">Pengajuan Cuti Terbaru</h2>
-                <a href="{{ route('hr.manajemen-cuti.rekap-cuti') }}"
-                    class="text-[#0074D9] font-semibold hover:underline text-sm">Lihat Semua</a>
+            <div class="flex justify-center md:justify-between items-center mb-2">
+                <h2 class="text-lg font-bold text-center md:text-left">Pengajuan Cuti Terbaru</h2>
             </div>
             <div class="overflow-x-auto">
                 <table class="min-w-max w-full text-xs text-gray-700 rounded-xl shadow border-separate border-spacing-0">
@@ -73,6 +72,13 @@
                         @endforelse
                     </tbody>
                 </table>
+                <a href="{{ route('hr.manajemen-cuti.rekap-cuti') }}"
+                            class="inline-flex items-center gap-2 px-4 py-2 mt-8 rounded-lg bg-linear-to-r from-[#0074D9] to-[#F53003] text-white font-bold shadow-md hover:scale-105 hover:shadow-lg transition-all duration-200 text-sm group">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l7-7-7-7M22 12H3"/>
+                            </svg>
+                            Lihat Semua
+                </a>
             </div>
         </div>
         {{-- Aktivitas HR mobile (di bawah tabel cuti terbaru) --}}

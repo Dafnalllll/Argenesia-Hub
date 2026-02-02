@@ -10,6 +10,7 @@ class PengajuanCuti extends Model
 {
     protected $fillable = [
         'user_id',
+        'karyawan_id', // <-- tambahkan ini!
         'tipe_cuti_id',
         'tanggal_mulai',
         'tanggal_selesai',
@@ -25,6 +26,6 @@ class PengajuanCuti extends Model
 
     public function karyawan()
     {
-        return $this->belongsTo(Karyawan::class, 'user_id', 'user_id');
+        return $this->belongsTo(Karyawan::class, 'karyawan_id');
     }
 }

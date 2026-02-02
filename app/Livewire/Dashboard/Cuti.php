@@ -12,8 +12,14 @@ class Cuti extends Component
     {
         $userId = Auth::id();
 
-        // Sisa cuti (contoh: total tahunan - yang sudah diambil)
-        $sisaCuti = 5; // Ganti dengan logika sesuai aturan cuti di perusahaan
+        // Jumlah cuti yang Disetujui
+        $jumlahCutiDisetujui = PengajuanCuti::where('user_id', $userId)
+            ->where('status', 'Disetujui')
+            ->count();
+
+        // Sisa cuti (misal saldo default 12 - jumlah cuti disetujui)
+        $saldoCuti = 12; // Atau ambil dari field saldo_cuti jika sudah ada di tabel karyawans
+        $sisaCuti = $saldoCuti - $jumlahCutiDisetujui;
 
         // Total pengajuan cuti user
         $totalPengajuan = PengajuanCuti::where('user_id', $userId)->count();
@@ -36,6 +42,7 @@ class Cuti extends Component
             ->get();
 
         return view('livewire.karyawan.dashboard.cuti.cuti', [
+            'jumlahCutiDisetujui' => $jumlahCutiDisetujui, // <-- Tambahkan ini
             'sisaCuti' => $sisaCuti,
             'totalPengajuan' => $totalPengajuan,
             'cutiDiproses' => $cutiDiproses,

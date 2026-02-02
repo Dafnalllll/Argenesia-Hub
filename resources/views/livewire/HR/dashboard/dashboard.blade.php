@@ -5,7 +5,10 @@
     @include('livewire.HR.dashboard.dashboard-mobile')
     {{-- DESKTOP VIEW --}}
     <div class="hidden md:block">
-        <h1 class="text-3xl font-bold text-white mb-6">Dashboard HR</h1>
+        <h1 class="text-3xl font-bold mb-8 text-white tracking-wide animate-fade-in-down flex items-center gap-4">
+            <img src="{{ asset('img/role/hr.webp') }}" alt="Admin" class="w-10 h-10" />
+            Dashboard HR
+        </h1>
         <div class="space-y-8">
             {{-- Card Statistik --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -44,7 +47,12 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-xl font-bold">Pengajuan Cuti Terbaru</h2>
                         <a href="{{ route('hr.manajemen-cuti.rekap-cuti') }}"
-                            class="text-[#0074D9] font-semibold hover:underline">Lihat Semua</a>
+                            class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-linear-to-r from-[#0074D9] to-[#F53003] text-white font-bold shadow-md hover:scale-105 hover:shadow-lg transition-all duration-200 text-sm group">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l7-7-7-7M22 12H3"/>
+                            </svg>
+                            Lihat Semua
+                        </a>
                     </div>
                     <div class="overflow-x-auto flex-1">
                         <table class="min-w-275 w-full text-sm text-gray-700 rounded-2xl shadow-lg border-separate border-spacing-0">
@@ -66,7 +74,7 @@
                                         <td class="py-3 px-6">{{ \Illuminate\Support\Str::limit($cuti->created_at, 10, '') }}</td>
                                         <td class="py-3 px-6">
                                             @if($cuti->status == 'Disetujui')
-                                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Diterima</span>
+                                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-semibold">Disetujui</span>
                                             @elseif($cuti->status == 'Ditolak')
                                                 <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-semibold">Ditolak</span>
                                             @else

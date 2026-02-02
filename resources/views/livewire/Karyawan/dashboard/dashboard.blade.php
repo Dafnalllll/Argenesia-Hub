@@ -1,6 +1,36 @@
 @section('title', 'Dashboard || Argenesia Hub')
-<div>
-    <div class="fixed top-4 right-8 flex items-center space-x-4 z-10">
+<div x-data="{showNotif: false, showNotifAktif: false}"
+    :class="(showNotif || showNotifAktif) ? 'overflow-hidden h-screen' : ''">
+
+    <style>
+    @layer utilities {
+    .animate-floating {
+        animation: floating 2s ease-in-out infinite;
+    }
+    @keyframes floating {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+}
+    </style>
+
+    @php
+        $isAktif = (Auth::user()->karyawan && Auth::user()->karyawan->status_karyawan === 'Aktif');
+    @endphp
+
+    <div class="fixed top-4 right-8 flex items-center space-x-4 z-10 cursor-pointer">
+        <div class="relative"
+            @click="showNotif = {{ $isAktif ? 'false' : 'true' }}; showNotifAktif = {{ $isAktif ? 'true' : 'false' }}">
+            <img src="{{ asset('img/notif.webp') }}"
+                alt="Notif"
+                class="w-8 h-8 mr-2 {{ $isAktif ? '' : 'animate-floating' }}" />
+            @unless($isAktif)
+                <!-- Notif badge hanya jika belum aktif -->
+                <span class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shadow animate-floating">
+                    !
+                </span>
+            @endunless
+        </div>
         <span class="text-lg font-semibold text-white">Selamat Datang, {{ Auth::user()->name }}</span>
         <a href="/profil">
             <img src="{{ (Auth::user()->karyawan && Auth::user()->karyawan->foto) ? asset(Auth::user()->karyawan->foto) : asset('img/sidebar/profil.webp') }}"
@@ -24,7 +54,9 @@
         <!-- Card 1 -->
         <div class="bg-white/30 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl p-10 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-2xl w-full cursor-pointer">
             <img src="{{ asset('img/cuti/cuti.webp') }}" alt="Jumlah Cuti" class="w-14 h-14 mb-4 drop-shadow" />
-            <span class="text-5xl font-extrabold text-[#0074D9] drop-shadow">12</span>
+            <span class="text-5xl font-extrabold text-[#0074D9] drop-shadow">
+                {{ $jumlahCutiDisetujui }}
+            </span>
             <span class="mt-2 text-gray-800 font-semibold tracking-wide text-xl">Jumlah Cuti</span>
             <span class="mt-2 text-gray-600 text-sm text-center">Total cuti yang sudah kamu dapatkan selama bekerja.</span>
             <a href="/cuti/riwayat" class="mt-4 px-4 py-2 rounded-lg bg-[#0074D9] text-white font-semibold shadow hover:bg-[#005fa3] transition-all hover:scale-105">Lihat Riwayat</a>
@@ -32,7 +64,9 @@
         <!-- Card 2 -->
         <div class="bg-white/30 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl p-10 flex flex-col items-center transition-transform hover:scale-105 hover:shadow-2xl w-full cursor-pointer">
             <img src="{{ asset('img/cuti/riwayat.webp') }}" alt="Sisa Cuti" class="w-14 h-14 mb-4 drop-shadow" />
-            <span class="text-5xl font-extrabold text-[#F53003] drop-shadow">5</span>
+            <span class="text-5xl font-extrabold text-[#F53003] drop-shadow">
+                {{ $sisaCuti }}
+            </span>
             <span class="mt-2 text-gray-800 font-semibold tracking-wide text-xl">Sisa Cuti</span>
             <span class="mt-2 text-gray-600 text-sm text-center">Cuti yang masih bisa kamu ajukan tahun ini.</span>
             <a href="/cuti/pengajuan" class="mt-4 px-4 py-2 rounded-lg bg-[#F53003] text-white font-semibold shadow hover:bg-[#c41e00] transition-all hover:scale-105">Ajukan Cuti</a>
@@ -53,7 +87,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 px-6 w-full">
         <!-- Tabel 1 -->
         <div class="bg-white/40 backdrop-blur-md rounded-2xl shadow-lg p-6 overflow-x-auto mb-8">
-            <h3 class="text-lg font-bold mb-4 text-[#0074D9]">Pengajuan Cuti Terbaru</h3>
+            <h3 class="text-lg font-bold mb-4 text-black text-center md:text-left">Pengajuan Cuti Terbaru</h3>
             <table class="min-w-full text-sm border border-gray-300 rounded-lg overflow-hidden">
                 <thead class="bg-[#0074D9]">
                     <tr class="text-left text-gray-700">
@@ -69,7 +103,7 @@
             <td class="py-2 px-3">{{ $item->tipeCuti->nama_cuti ?? '-' }}</td>
             <td class="py-2 px-3">
                 <span class="px-3 py-1 rounded-full font-semibold border
-                    @if($item->status == 'Diterima')
+                    @if($item->status == 'Disetujui')
                         border-green-500 text-green-700 bg-green-50
                     @elseif($item->status == 'Ditolak')
                         border-red-500 text-red-700 bg-red-50
@@ -91,8 +125,7 @@
         <!-- Riwayat Kegiatan User-->
             <livewire:dashboard.aktivitas-table />
     </div>
+    <!-- Notif Modal -->
+    @include('components.notif')
+
 </div>
-
-
-
-

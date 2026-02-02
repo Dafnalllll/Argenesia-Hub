@@ -43,26 +43,13 @@
             window.location.href = '/login';
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const disabledRoutes = [
-                '/hr/manajemen-cuti/rekap-cuti',
-                '/hr/manajemen-cuti',
-            ];
-            if (disabledRoutes.some(route => window.location.pathname.startsWith(route))) {
-                if (window.AOS) {
-                    AOS.init({ disable: true });
-                }
-            }
-        });
-    </script>
     @livewireScripts
 </body>
 </html>
 
 <style>
-    html, body {
-        max-width: 500vw;
-        overflow-x: hidden;
-    }
+html, body {
+    overflow-x: hidden;
+    width: 100vw;
+}
 </style>
